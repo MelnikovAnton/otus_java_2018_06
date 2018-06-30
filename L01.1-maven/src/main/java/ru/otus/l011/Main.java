@@ -2,7 +2,12 @@ package ru.otus.l011;
 
 import com.google.common.collect.Lists;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+//import java.util.*;
 
 /**
  * Created by tully.
@@ -42,6 +47,8 @@ public class Main {
     }
 
     private static void calcTime(Runnable runnable) {
+
+
         long startTime = System.nanoTime();
         for (int i = 0; i < MEASURE_COUNT; i++)
             runnable.run();

@@ -7,11 +7,11 @@
     <!-- Project Object Model -->
 
     <name>L01.1-maven</name>
-    <description>Code example for L01.1</description>
+    <description>Code example for L01.1 with ProGuard</description>
 
     <developers>
         <developer>
-            <name>tully</name>
+            <name>Melnikov</name>
         </developer>
     </developers>
 
@@ -24,8 +24,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.10</maven.compiler.source>
-        <maven.compiler.target>1.10</maven.compiler.target>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>10</maven.compiler.target>
         <com.google.guava.version>25.0-jre</com.google.guava.version>
         <my.variable>42</my.variable>
     </properties>
@@ -36,6 +36,8 @@
             <artifactId>guava</artifactId>
             <version>${com.google.guava.version}</version>
         </dependency>
+
+
     </dependencies>
 
 
@@ -71,7 +73,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <appendAssemblyId>true</appendAssemblyId>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -82,7 +84,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>com.github.wvengen</groupId>
@@ -98,18 +99,26 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <obfuscate>true</obfuscate>
+                    <outjar>${project.name}-small.jar</outjar>
+                    <proguardVersion>6.0.3</proguardVersion>
                     <options>
-                        <option>-keep public class * { public *; }</option>
+                        <option>-keep public class ru.otus.l011.Main {
+                            public static void main(java.lang.String[]);
+                            }
+                        </option>
+                        <option>-libraryjars ${java.home}/jmods/java.base.jmod(!**.jar;!module-info.class)</option>
+                        <option>-dontwarn</option>
                     </options>
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                    </libs>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.0.3</version>
+                    </dependency>
+                </dependencies>
             </plugin>
-    
         </plugins>
-
     </build>
-
-
 </project>
