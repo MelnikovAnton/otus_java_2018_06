@@ -21,6 +21,7 @@ public class InstrumentationGetSizeImpl implements GetSize {
     }
 
     private long getSize(Object o,long summ){
+        if (o==null) return summ;
         Class<?> clazz = o.getClass();
 
         if (clazz.isArray()){

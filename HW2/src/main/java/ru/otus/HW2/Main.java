@@ -2,6 +2,7 @@ package ru.otus.HW2;
 
 import ru.otus.HW2.impl.ArrayGetSizeImpl;
 import ru.otus.HW2.impl.InstrumentationGetSizeImpl;
+import ru.otus.HW2.impl.ObjectGraphGetSize;
 import ru.otus.HW2.impl.UnsafeGetSizeImpl;
 import sun.misc.Unsafe;
 
@@ -29,6 +30,7 @@ public class Main {
     private static GetSize arrSize= new ArrayGetSizeImpl();
     private static GetSize unsafeSize = new UnsafeGetSizeImpl();
     private static GetSize instrSize = new InstrumentationGetSizeImpl();
+    private static GetSize grathSize = new ObjectGraphGetSize();
 
 
     public static void main(String... args) throws InterruptedException {
@@ -81,13 +83,14 @@ public class Main {
         System.out.println("Array Size =" + arrSize.getSize(c) + " Byte");
         System.out.println("Unsafe Size =" + unsafeSize.getSize(c) + " Byte");
         System.out.println("Instrumentatin Size =" + instrSize.getSize(c) + " Byte");
+        System.out.println("Grath Size = " + grathSize.getSize(c) + " Byte");
     }
 
 
     private static class MyClass {
         private byte b = 0;     // +1
         private int i = 0;      // +4
-        private long l = 1;     // +8
+     //   private long l = 1;     // +8
   //      private byte b1=0;
     }
 
