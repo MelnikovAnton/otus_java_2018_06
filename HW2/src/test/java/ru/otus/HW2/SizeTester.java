@@ -14,8 +14,23 @@ public class SizeTester {
  //   private static GetSize instrSize = new InstrumentationGetSizeImpl();
 
     @Test
-    public void testObject(){
-        assertTrue(expectedSize(16L,getSizes(()->new Object())));
+    public void testArrayObject(){
+        assertEquals(16L,arrSize.getSize(()->new Object()));
+    }
+
+    @Test
+    public void testUnsafeObject(){
+        assertEquals(16L,unsafeSize.getSize(()->new Object()));
+    }
+
+    @Test
+    public void testArrEmptyString(){
+        assertEquals(24L,arrSize.getSize(()->new String()));
+    }
+
+    @Test
+    public void testUnsafeEmptyString(){
+        assertEquals(24L,unsafeSize.getSize(()->new String()));
     }
 
 

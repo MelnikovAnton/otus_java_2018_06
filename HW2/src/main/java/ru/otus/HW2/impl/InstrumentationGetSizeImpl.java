@@ -16,14 +16,14 @@ public class InstrumentationGetSizeImpl implements GetSize {
 
     @Override
     public long getSize(Creator c) {
-        Object o=c.create();
-        return getSize(o,0);
+        return instrumentation.getObjectSize(c.create());
+        //Object o=c.create();
+     //   return getSize(o,0);
     }
 
     private long getSize(Object o,long summ){
         if (o==null) return summ;
         Class<?> clazz = o.getClass();
-
         if (clazz.isArray()){
             long arrSize=summ;
             for(int i = 0; i<Array.getLength(o); i++){

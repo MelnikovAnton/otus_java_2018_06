@@ -11,7 +11,7 @@ public class ArrayGetSizeImpl implements GetSize {
     }
 
     private long getSizeByArray(Creator c){
-        int size = 20_000_000;
+        int size = 2_000_000;
 
         long mem = getMem();
    //     System.out.println("Mem: " + mem);
@@ -19,7 +19,7 @@ public class ArrayGetSizeImpl implements GetSize {
         Object[] array = new Object[size];
 
         long mem2 = getMem();
- //      System.out.println("Ref size: " + (mem2 - mem) / array.length);
+       System.out.println("Ref size: " + (mem2 - mem) / array.length);
 
         for (int i = 0; i < array.length; i++) {
             array[i] = c.create();

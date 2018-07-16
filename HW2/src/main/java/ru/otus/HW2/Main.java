@@ -1,13 +1,13 @@
 package ru.otus.HW2;
 
-import ru.otus.HW2.impl.ArrayGetSizeImpl;
-import ru.otus.HW2.impl.InstrumentationGetSizeImpl;
-import ru.otus.HW2.impl.ObjectGraphGetSize;
-import ru.otus.HW2.impl.UnsafeGetSizeImpl;
-import sun.misc.Unsafe;
+import ru.otus.HW2.impl.*;
+import ru.otus.HW2.util.ObjectSizeCalculator;
 
-import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.HashMap;
+
 
 /**
  * VM options -Xmx512m -Xms512m
@@ -30,7 +30,9 @@ public class Main {
     private static GetSize arrSize= new ArrayGetSizeImpl();
     private static GetSize unsafeSize = new UnsafeGetSizeImpl();
     private static GetSize instrSize = new InstrumentationGetSizeImpl();
-    private static GetSize grathSize = new ObjectGraphGetSize();
+private static GetSize treeSize = new ReflectionGetSizeImpl();
+
+
 
 
     public static void main(String... args) throws InterruptedException {
@@ -39,38 +41,83 @@ public class Main {
 
 
 
-        System.out.println("\nnew Object()");
-        sizePrinter(()->new Object());
-
-        System.out.println("\nnew String(\"\")");
-        sizePrinter(()->new String(""));
-
-        System.out.println("\nnew MyClass()");
-        sizePrinter(()->new MyClass());
-
-        System.out.println("\nnew String(\"Not empty String\")");
-        sizePrinter(()->new String("Not empty String"));
-
+//        System.out.println("\nnew Object()");
+//        sizePrinter(()->new Object());
+//
+//        System.out.println("\nnew String(\"\")");
+//        sizePrinter(()->new String(""));
+//
+//        System.out.println("\nnew String(\"Not empty String\")");
+//        sizePrinter(()->new String("Not empty String"));
+//
+//        System.out.println("\nnew String(\"Very long String\")");
+//        sizePrinter(()->new String("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+//
         System.out.println("\n(int) 1");
         sizePrinter(()->(int)1);
+//
+//        System.out.println("\nnew Integer(1)");
+//        sizePrinter(()->new Integer(1));
+//
+        System.out.println("\nnew int[2]");
+        sizePrinter(()->new int[2]);
 
-        System.out.println("\nnew Integer(1)");
-        sizePrinter(()->new Integer(1));
+        System.out.println("\nnew int[4]");
+        sizePrinter(()->new int[4]);
 
-        System.out.println("\nnew int[5]");
-        sizePrinter(()->new int[5]);
+        System.out.println("\nnew int[8]");
+        sizePrinter(()->new int[8]);
 
-        System.out.println("\nnew MySubClass()");
-        sizePrinter(()->new MySubClass());
+        System.out.println("\nnew int[16]");
+        sizePrinter(()->new int[16]);
 
-        System.out.println("\nnew MyClass[10]");
+        System.out.println("\nnew int[32]");
+        sizePrinter(()->new int[32]);
+
+        System.out.println("\nnew int[10] with vslues");
         sizePrinter(()->{
-            MyClass[] result = new MyClass[5];
-            for (int i=0;i<5;i++){
-                result[i]=new MyClass();
+            int[] rez = new int[10];
+            for (int i=0;i<10;i++){
+                rez[i]=i;
             }
-            return result;
+            return rez;
         });
+
+
+        System.out.println("\nnew long[16]");
+        sizePrinter(()->new long[16]);
+
+        System.out.println("\nnew short[7]");
+        sizePrinter(()->new short[7]);
+
+
+//
+//        System.out.println("\nnew MySubClass()");
+//        sizePrinter(()->new MySubClass());
+//
+        System.out.println("\nnew MyClass()");
+        sizePrinter(()->new MyClass());
+//
+//        System.out.println("\nnew BigInteger(\"1\")");
+//        sizePrinter(()->new BigInteger("1"));
+//
+        System.out.println("\nnew MyClass[10] whithout values");
+        sizePrinter(()->new MyClass[10]);
+//
+//        System.out.println("\nnew HashMap whithout values");
+//        sizePrinter(()->new HashMap<String,String>());
+//
+//        System.out.println("\nnew HashMap whithout values");
+//        sizePrinter(()->new HashMap<String,String>());
+
+//        System.out.println("\nnew MyClass[10]");
+//        sizePrinter(()->{
+//            MyClass[] result = new MyClass[10];
+//            for (int i=0;i<10;i++){
+//                result[i]=new MyClass();
+//            }
+//            return result;
+//        });
 
 
 
@@ -83,21 +130,28 @@ public class Main {
         System.out.println("Array Size =" + arrSize.getSize(c) + " Byte");
         System.out.println("Unsafe Size =" + unsafeSize.getSize(c) + " Byte");
         System.out.println("Instrumentatin Size =" + instrSize.getSize(c) + " Byte");
-        System.out.println("Grath Size = " + grathSize.getSize(c) + " Byte");
+        System.out.println("Reflection Size =" + treeSize.getSize(c) + " Byte");
+        System.out.println("Twitter size calculator " + ObjectSizeCalculator.getObjectSize(c.create()));
+
+
     }
 
 
     private static class MyClass {
         private byte b = 0;     // +1
         private int i = 0;      // +4
-     //   private long l = 1;     // +8
-  //      private byte b1=0;
+        private long l = 1;     // +8
+        private short s1=0; //+2
+        private short s2 =0;
+        private byte b1 = 0;
+
     }
 
     private static class MySubClass extends MyClass{
         private int g=0;
         private long ll=1l;
-        private MyClass myClass;
+        private long ll2=0;
+        private MyClass myClass = new MyClass();
 
 
     }
