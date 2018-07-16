@@ -29,10 +29,10 @@ public enum PrimitiveSize {
     }
     
     public static int getSizeByName(String name){
-        System.out.println("searhing name " + name);
+      //  System.out.println("searhing name " + name);
         for (PrimitiveSize s:PrimitiveSize.values()) {
             if (name.equals(s.name)) {
-                System.out.println("SIZE " + s.size);
+       //         System.out.println("SIZE " + s.size);
                 return s.size;
             }
         } return 0;

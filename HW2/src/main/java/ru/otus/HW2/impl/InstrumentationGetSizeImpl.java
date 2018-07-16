@@ -19,21 +19,9 @@ public class InstrumentationGetSizeImpl implements GetSize {
         return instrumentation.getObjectSize(c.create());
         //Object o=c.create();
      //   return getSize(o,0);
-    }
-
-    private long getSize(Object o,long summ){
-        if (o==null) return summ;
-        Class<?> clazz = o.getClass();
-        if (clazz.isArray()){
-            long arrSize=summ;
-            for(int i = 0; i<Array.getLength(o); i++){
-                arrSize += getSize(Array.get(o, i),summ);
-            }
-            return arrSize;
-        } else  {
-            return summ+instrumentation.getObjectSize(o);
-        }
-
 
     }
+
+
+
 }

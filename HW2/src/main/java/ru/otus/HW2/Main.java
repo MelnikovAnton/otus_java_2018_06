@@ -53,42 +53,42 @@ private static GetSize treeSize = new ReflectionGetSizeImpl();
 //        System.out.println("\nnew String(\"Very long String\")");
 //        sizePrinter(()->new String("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
 //
-        System.out.println("\n(int) 1");
-        sizePrinter(()->(int)1);
+//        System.out.println("\n(int) 1");
+//        sizePrinter(()->(int)1);
 //
 //        System.out.println("\nnew Integer(1)");
 //        sizePrinter(()->new Integer(1));
 //
-        System.out.println("\nnew int[2]");
-        sizePrinter(()->new int[2]);
-
-        System.out.println("\nnew int[4]");
-        sizePrinter(()->new int[4]);
-
-        System.out.println("\nnew int[8]");
-        sizePrinter(()->new int[8]);
-
-        System.out.println("\nnew int[16]");
-        sizePrinter(()->new int[16]);
-
-        System.out.println("\nnew int[32]");
-        sizePrinter(()->new int[32]);
-
-        System.out.println("\nnew int[10] with vslues");
-        sizePrinter(()->{
-            int[] rez = new int[10];
-            for (int i=0;i<10;i++){
-                rez[i]=i;
-            }
-            return rez;
-        });
-
-
-        System.out.println("\nnew long[16]");
-        sizePrinter(()->new long[16]);
-
-        System.out.println("\nnew short[7]");
-        sizePrinter(()->new short[7]);
+//        System.out.println("\nnew int[2]");
+//        sizePrinter(()->new int[2]);
+//
+//        System.out.println("\nnew int[4]");
+//        sizePrinter(()->new int[4]);
+//
+//        System.out.println("\nnew int[8]");
+//        sizePrinter(()->new int[8]);
+//
+//        System.out.println("\nnew int[16]");
+//        sizePrinter(()->new int[16]);
+//
+//        System.out.println("\nnew int[32]");
+//        sizePrinter(()->new int[32]);
+//
+//        System.out.println("\nnew int[10] with vslues");
+//        sizePrinter(()->{
+//            int[] rez = new int[10];
+//            for (int i=0;i<10;i++){
+//                rez[i]=i;
+//            }
+//            return rez;
+//        });
+//
+//
+//        System.out.println("\nnew long[16]");
+//        sizePrinter(()->new long[16]);
+//
+//        System.out.println("\nnew short[7]");
+//        sizePrinter(()->new short[7]);
 
 
 //
@@ -102,7 +102,31 @@ private static GetSize treeSize = new ReflectionGetSizeImpl();
 //        sizePrinter(()->new BigInteger("1"));
 //
         System.out.println("\nnew MyClass[10] whithout values");
-        sizePrinter(()->new MyClass[10]);
+        sizePrinter(()->new MyClass[9]);
+
+        System.out.println("\nnew MyClass[6] ");
+        sizePrinter(()->{
+            MyClass[] rez = new MyClass[6];
+            for (int i=0;i<6;i++){
+                rez[i]=new MyClass();
+            }
+            return rez;
+        });
+
+        System.out.println("\nnew Object[1000] whithout values");
+        sizePrinter(()->new Object[200]);
+
+
+        System.out.println("\nnew Object[12]");
+        sizePrinter(()->{
+            Object[] rez = new Object[12];
+            for (int i=0;i<12;i++){
+                rez[i]=new Object();
+            }
+
+            return rez;
+        });
+
 //
 //        System.out.println("\nnew HashMap whithout values");
 //        sizePrinter(()->new HashMap<String,String>());

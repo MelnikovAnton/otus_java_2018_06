@@ -3,15 +3,13 @@ package ru.otus.HW2.impl;
 import ru.otus.HW2.Creator;
 import ru.otus.HW2.GetSize;
 import ru.otus.HW2.util.PrimitiveSize;
+import ru.otus.HW2.util.UtilSize;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class UnsafeGetSizeImpl implements GetSize {
@@ -27,6 +25,7 @@ public class UnsafeGetSizeImpl implements GetSize {
 
 
     public UnsafeGetSizeImpl() {
+        System.out.println("NR_BITS/BYTE " + WORD );
         try {
             Field f = Unsafe.class.getDeclaredField("theUnsafe");
             f.setAccessible(true);
@@ -38,72 +37,27 @@ public class UnsafeGetSizeImpl implements GetSize {
 
     @Override
     public long getSize(Creator creator) {
-        return getSize(creator.create());
-    //    return sizeOf(creator.create(),0);
+
+        try {
+            return getSize(creator.create().getClass(),creator.create());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+        //    return sizeOf(creator.create(),0);
     }
 
 
-//    public long sizeOf(Object o,long summ){
-//        //
-//        // Get the instance fields of src class
-//        //
-//if (o == null) return MIN_SIZE + summ;
-//        Class<?> src = o.getClass();
-//
-//        if (src.isArray()) {
-//            long arrSize = summ;
-//            for (int i = 0; i < Array.getLength(o); i++) {
-//                arrSize += sizeOf(Array.get(o, i), summ);
-//            }
-//            return arrSize;
-//        } else {
-//        List<Field> instanceFields = new LinkedList<Field>();
-//        do{
-//            if(src == Object.class) return MIN_SIZE;
-//            for (Field f : src.getDeclaredFields()) {
-//                if((f.getModifiers() & Modifier.STATIC) == 0){
-//                    instanceFields.add(f);
-//                }
-//            }
-//            src = src.getSuperclass();
-//        }while(instanceFields.isEmpty());
-//        //
-//        // Get the field with the maximum offset
-//        //
-//        long maxOffset = 0;
-//        Field maxField = null;
-//        for (Field f : instanceFields) {
-//            long offset = u.objectFieldOffset(f);
-//            if(offset > maxOffset) {
-//                maxOffset = offset;
-//                maxField = f;
-//            }
-//        }
-//        if (maxField != null) {
-//            System.out.println(maxField.getType().getName() + " ==  " +PrimitiveSize.getSizeByName(maxField.getType().getName()) + "   offset = " + maxOffset);
-//            maxOffset += PrimitiveSize.getSizeByName(maxField.getType().getName());}
-//        return  (maxOffset % 8 == 0 ? maxOffset : ((maxOffset / WORD) + 1) * WORD) + summ;
-//    }
 
-    public long getSize(Object o) {
+    public long getSize(Class clazz,Object o) throws IllegalAccessException {
         if (o==null) return REF_SIZE;
-
-        Class<?> clazz = o.getClass();
+//
+//        Class<?> clazz = o.getClass();
         System.out.println(clazz);
+      //  System.out.println(clazz.getComponentType());
         if (clazz.isArray()) {
             int arrLength = Array.getLength(o);
-            Class<?> itemClass=null;
-            try {
-            itemClass = Array.get(o, 0).getClass();
-            } catch (NullPointerException e) {
-                try {
-                    itemClass = Class.forName(clazz.toString().substring(2));
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-
+            Class<?> itemClass=clazz.getComponentType();
 
             long itemSize=0;
             System.out.println(itemClass.isPrimitive());
@@ -111,34 +65,28 @@ public class UnsafeGetSizeImpl implements GetSize {
 
            itemSize=PrimitiveSize.getSizeByName(itemClass.getSimpleName());
         if (itemSize==0) {
-            if (Array.get(o,0)==null) {
-                try {
-                    getSize(itemClass.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }else itemSize = getSize(Array.get(o,0));
+            itemSize = getSize(itemClass,Array.get(o,0));
         }
             System.out.println("Item size " + itemSize);
-            long size = itemSize*arrLength + 16;
+            long size = itemSize*arrLength + UtilSize.ARRAY_HEADER;
 
 
             System.out.println("item size: " + itemSize + " count: " + arrLength + " size: " + size);
 
-            return size%8==0?size:(size/8+1)*8;
+            return roundTo(size,UtilSize.OBJECT_PADDING);
         } else {
 
             int refSize = 0;
-            HashSet<Field> fields = new HashSet<Field>();
-            Class c = o.getClass();
-            while (c != Object.class) {
-                refSize += REF_SIZE;
-                for (Field f : c.getDeclaredFields()) {
+            ArrayList<Field> fields = new ArrayList<>();
+      //      Class c = o.getClass();
+            while (clazz != Object.class) {
+                refSize += UtilSize.REFERENCE_SIZE;
+                for (Field f : clazz.getDeclaredFields()) {
                     if ((f.getModifiers() & Modifier.STATIC) == 0) {
                         fields.add(f);
                     }
                 }
-                c = c.getSuperclass();
+                clazz = clazz.getSuperclass();
             }
 
             if (fields.isEmpty()) return MIN_SIZE;
@@ -155,14 +103,27 @@ public class UnsafeGetSizeImpl implements GetSize {
 
                     if (maxField != null) {
       //      System.out.println(maxField.getType().getName() + " ==  " +PrimitiveSize.getSizeByName(maxField.getType().getName()) + "   offset = " + maxSize);
-                        maxSize += PrimitiveSize.getSizeByName(maxField.getType().getName());}
+                        int maxFieldSize = PrimitiveSize.getSizeByName(maxField.getType().getName());
+                        if (maxFieldSize==0){
+                            if (maxField!=null){
+                                maxField.setAccessible(true);
+                                maxSize += getSize(maxField.getType(),maxField.get(o));
+                            }else maxSize += REF_SIZE;
+                        } else maxSize += maxFieldSize;
+
+
+            }
 
       //      maxSize += REF_SIZE;
 
 
-            return (maxSize % 8 == 0 ? maxSize : ((maxSize / 8) + 1) * 8) ;   // padding
+            return roundTo(maxSize,UtilSize.OBJECT_PADDING);   // padding
         }
     }
 
+
+   private static long roundTo(long x, int multiple) {
+        return ((x + multiple - 1) / multiple) * multiple;
+    }
 
 }

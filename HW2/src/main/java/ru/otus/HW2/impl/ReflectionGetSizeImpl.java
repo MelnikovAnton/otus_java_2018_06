@@ -2,53 +2,52 @@ package ru.otus.HW2.impl;
 
 import ru.otus.HW2.Creator;
 import ru.otus.HW2.GetSize;
+import ru.otus.HW2.util.ObjectSizeCalculator;
 import ru.otus.HW2.util.PrimitiveSize;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
+import java.util.*;
 
 public class ReflectionGetSizeImpl implements GetSize {
+
+    private Field[] referenceFields;
+
     @Override
     public long getSize(Creator c) {
-        try {
-           return getPremitiveFields(c.create(),c.create().getClass(),0);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return 0;
-        }
+        return 0;
 
     }
 
-    private long getPremitiveFields(Object o,Class clazz,long summ) throws IllegalAccessException {
-        System.out.println("Object " + o + " Class " + clazz + " summ " + summ);
-
-long size=summ;
-//        if (o==null ) {
-//            size += 4;
-//            return (size/8+1)*8;
+//    public long getClassSize(Class clazz,Object o){
+//        {
+//            long fieldsSize = 0;
+//            List<Field> Fields = new ArrayList<>();
+//            for (Field f : clazz.getDeclaredFields()) {
+//                if ((f.getModifiers() & Modifier.STATIC) == 0) {
+//                    continue;
+//                }
+//                Class type = f.getType();
+//                if (type.isPrimitive()) {
+//                    fieldsSize += PrimitiveSize.getSizeByName(type.getName());
+//                } else {
+//                    f.setAccessible(true);
+//                    f.get(o);
+//                    fieldsSize += referenceSize;
+//                }
+//            }
+//            final Class<?> superClass = clazz.getSuperclass();
+//            if (superClass != null) {
+//                final ObjectSizeCalculator.ClassSizeInfo superClassInfo = classSizeInfos.getUnchecked(superClass);
+//                fieldsSize += roundTo(superClassInfo.fieldsSize, superclassFieldPadding);
+//                referenceFields.addAll(Arrays.asList(superClassInfo.referenceFields));
+//            }
+//            this.fieldsSize = fieldsSize;
+//            this.objectSize = roundTo(objectHeaderSize + fieldsSize, objectPadding);
+//            this.referenceFields = referenceFields.toArray(
+//                    new Field[referenceFields.size()]);
 //        }
-
-
-
-
-  //      System.out.println(" we get object type " + o.getClass().getName() + " summ = " + summ);
-
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field f:fields) {
-            if((f.getModifiers() & Modifier.STATIC) == 0){
-                if (f.getType().isPrimitive()){
-                    System.out.println("field " + f.getName() + " type " + f.getType().getName() + " size " + PrimitiveSize.getSizeByName(f.getType().getName()));
-                    size += PrimitiveSize.getSizeByName(f.getType().getName());
-                } else {
-                        System.out.println("field " + f.getName() + " type " + f.getType().getName() );
-                        f.setAccessible(true);
-                        getPremitiveFields(f.get(o),f.getType(),size);
-                }
-            }
-        }
-        return size % 8 == 0 ? size : ((size / 8) + 1) * 8;
-    }
+//    }
 
 
 }
