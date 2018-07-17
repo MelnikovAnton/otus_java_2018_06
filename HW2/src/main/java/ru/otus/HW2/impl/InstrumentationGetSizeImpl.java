@@ -51,7 +51,6 @@ public class InstrumentationGetSizeImpl implements GetSize {
     }
 
     private long getObjSize(Class clazz,Object o){
-
         return instrumentation.getObjectSize(o);
     }
 

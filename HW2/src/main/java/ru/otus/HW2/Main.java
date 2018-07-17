@@ -8,18 +8,20 @@ import java.util.List;
 
 
 /**
- * VM options -Xmx512m -Xms512m
- * -XX:+UseCompressedOops //on
- * -XX:-UseCompressedOops //off
- * <p>
- * Runtime runtime = Runtime.getRuntime();
- * long mem = runtime.totalMemory() - runtime.freeMemory();
- * <p>
- * System.gc()
- * <p>
- * jconsole, connect to pid
- * <p>
+ * для сборки:
+ * mvn clean install
+ *
+ * Для запуска:
  * java -javaagent:./target/HW2.jar -jar ./target/HW2.jar
+ *
+ * Значения для ArrayList у метода reflection меньше реального, так как внутри ArrayList-а находится массив Object[],
+ * то есть Reflection посчитает элементы массива равными 16.
+ *
+ * Судя по всему Instrumentation не лезет в глубь полей и поэтому у всех коллекций возвращает размер объекта без учета размера массива.
+ * Аналогичная ситуация и со String. Не учтен byte[].
+ *
+ * Метод ArrayGetSize не подходит для определения размера строк определенных через "".
+ * Так как такие строки хранятся в String Pool и не меняют объем памяти.
  */
 @SuppressWarnings({"RedundantStringConstructorCall", "InfiniteLoopStatement"})
 public class Main {
@@ -43,6 +45,7 @@ public class Main {
         },"new Object[10] with values"));
         factories.add(new Factory(() -> new String(""),"new String(\"\")"));
         factories.add(new Factory(() -> new String("Not empty String"),"new String(\"Not empty String\")"));
+        factories.add(new Factory(() -> arrSize.toString(),"arrSize.toString()"));
         factories.add(new Factory(() -> new int[2],"new int[2]"));
         factories.add(new Factory(() -> new int[10],"new int[10]"));
         factories.add(new Factory(MyClass::new,"MyClass::new"));
@@ -68,6 +71,7 @@ public class Main {
             for (int i = 0; i < 20; i++) {
                 rez.add(new MyClass());
             }
+            ((ArrayList<MyClass>) rez).trimToSize();
             return rez;
         },"ArrayList<MyClass> with 20 values"));
 
@@ -92,7 +96,11 @@ public class Main {
 
     public static void main(String... args)  {
         System.out.println("pid: " + ManagementFactory.getRuntimeMXBean().getName());
-
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         for (Factory f:factories) {
             sizePrinter(f);
         }
@@ -114,5 +122,4 @@ public class Main {
         private int i = 0;      // +4
 
     }
-
 }

@@ -33,13 +33,16 @@ public class ReflectionGetSizeImpl implements GetSize {
     public long getSize(Class clazz,Object o) throws IllegalAccessException {
 
         if (clazz.isArray()){
-            return getArrSize(clazz,o);
-        } else return getObjSize(clazz,o);
+              return getArrSize(clazz,o);
+        } else {
+            return getObjSize(clazz,o);
+        }
     }
 
     private long getArrSize(Class clazz,Object o) throws IllegalAccessException {
         Class elmClass = clazz.getComponentType();
         int arrLen = Array.getLength(o);
+    //    System.out.println("array whith length " + arrLen + " of elements " + elmClass.getName() + " primitive = " + elmClass.isPrimitive());
         long size=0;
         for (int i=0;i<arrLen;i++){
             if (!(elmClass.isPrimitive() || boxingClass.contains(elmClass))) {
@@ -57,6 +60,7 @@ public class ReflectionGetSizeImpl implements GetSize {
         return roundTo(size,OBJECT_PADDING);
     }
 
+    @SuppressWarnings("all")
     private long getObjSize(Class clazz,Object o) throws IllegalAccessException {
 
         long size=0;
