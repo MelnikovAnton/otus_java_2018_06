@@ -9,17 +9,17 @@ public enum PrimitiveSize {
     INT("int",4),
     FLOAT("float",4),
     LONG("long",8),
-    DOUBLE("double",4),
+    DOUBLE("double",8),
     Byte("Byte",1),
     Boolean("Boolean",1),
     Short("Short",2),
-    Char("Char",2),
+    Char("Character",2),
     Integer("Integer",4),
     Float("Float",4),
     Long("Long",8),
-    Double("Double",4);
+    Double("Double",8);
 
-    private static final int MIN_REF = 4;
+
     private String name;
     private int size;
 

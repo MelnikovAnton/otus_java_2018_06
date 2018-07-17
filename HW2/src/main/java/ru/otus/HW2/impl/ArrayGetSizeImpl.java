@@ -19,7 +19,7 @@ public class ArrayGetSizeImpl implements GetSize {
         Object[] array = new Object[size];
 
         long mem2 = getMem();
-       System.out.println("Ref size: " + (mem2 - mem) / array.length);
+ //      System.out.println("Ref size: " + (mem2 - mem) / array.length);
 
         for (int i = 0; i < array.length; i++) {
             array[i] = c.create();
