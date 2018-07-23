@@ -2,10 +2,9 @@ package ru.otus.HW3;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.CollationKey;
+import java.text.Collator;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -53,9 +52,45 @@ public class CollectionTests {
         List<Integer> myList=new MyArrayList<>();
         Collections.addAll(myList,intArr);
 
-        System.out.println("Before "+myList);
 
         Collections.sort(myList);
-        System.out.println("After " + myList);
+
+        List<Integer> list=new ArrayList<>();
+        Collections.addAll(list,intArr);
+        Collections.sort(list);
+
+        assertArrayEquals(myList.toArray(),list.toArray());
+
+    }
+
+
+    @Test
+    public void testObjectSort(){
+        TestObject[] arr = new TestObject[]{new TestObject(3,"three"),new TestObject(2,"two"),new TestObject(9,"nine")};
+
+        List<TestObject> myList=new MyArrayList<>();
+        Collections.addAll(myList,arr);
+        Collections.sort(myList, Comparator.comparingInt(o -> o.num));
+
+        List<TestObject> list=new MyArrayList<>();
+        Collections.addAll(list,arr);
+        Collections.sort(list, Comparator.comparingInt(o -> o.num));
+
+        assertArrayEquals(myList.toArray(),list.toArray());
+    }
+
+    private class TestObject{
+        private int num;
+        private String string;
+
+        public TestObject(int num, String string) {
+            this.num = num;
+            this.string = string;
+        }
+
+        @Override
+        public String toString() {
+            return "Numder=" + num + " String=" + string;
+        }
     }
 }

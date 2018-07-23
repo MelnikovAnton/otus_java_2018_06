@@ -22,7 +22,6 @@ public class MyArrayList<T> implements List<T> {
         arraySize=array.length;
     }
 
-
     public MyArrayList() {
         this.size=0;
         array = (T[]) new Object[DEAFAULT_SIZE];
@@ -36,25 +35,20 @@ public class MyArrayList<T> implements List<T> {
     }
 
     //=================================================
-    //TODO
+
     @Override
     public Iterator<T> iterator() {
-        System.out.println("ITERATOR!!!!!!!!!!!");
-        return null;
+        return new MyListIter(-1);
     }
 
-    //TODO
     @Override
     public ListIterator<T> listIterator() {
-        System.out.println("LIST ITERATOR!!!!!!!!!!!");
-        return null;
+        return new MyListIter(-1);
     }
 
-    //TODO
     @Override
     public ListIterator<T> listIterator(int index) {
-        System.out.println("LIST ITERATOR INDEX!!!!!!!!!!!");
-        return null;
+        return new MyListIter(index);
     }
 
 
@@ -174,6 +168,7 @@ public class MyArrayList<T> implements List<T> {
     //TODO
     @Override
     public boolean retainAll(Collection<?> c) {
+  //      throw new UnsupportedOperationException();
         return false;
     }
 
@@ -237,56 +232,66 @@ public class MyArrayList<T> implements List<T> {
 
 
     //========================= ITERATOR ===================================
-    private class ListIter implements ListIterator<T> {
+    private class MyListIter implements ListIterator<T> {
+        int cursor;
+
+        public MyListIter(int cursor) {
+            this.cursor = cursor;
+        }
 
         @Override
         public boolean hasNext() {
-            return false;
+            return cursor+1<=size;
         }
 
         @Override
         public T next() {
-            return null;
+            cursor++;
+            return array[cursor];
         }
 
         @Override
         public boolean hasPrevious() {
-            return false;
+            return cursor>0;
         }
 
         @Override
         public T previous() {
-            return null;
+            cursor--;
+            return array[cursor];
         }
 
         @Override
         public int nextIndex() {
-            return 0;
+            return cursor+1;
         }
 
         @Override
         public int previousIndex() {
-            return 0;
+            return cursor-1;
         }
 
         @Override
         public void remove() {
-
+            array[cursor]=null;
         }
 
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
-
+            for (int i=cursor;i<size;i++){
+                action.accept(array[i]);
+            }
         }
 
         @Override
         public void set(T t) {
-
+            array[cursor]=t;
         }
 
         @Override
         public void add(T t) {
-
+            MyArrayList.this.add(cursor,t);
+            cursor++;
         }
     }
 
