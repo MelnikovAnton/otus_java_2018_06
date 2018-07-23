@@ -79,7 +79,7 @@ public class CollectionTests {
         assertArrayEquals(myList.toArray(),list.toArray());
     }
 
-    private class TestObject{
+    public static class TestObject{
         private int num;
         private String string;
 

@@ -11,30 +11,27 @@ public class Main {
         myArrayList.add("1");
         myArrayList.add("2");
         myArrayList.add("3");
-        System.out.println(myArrayList.toString());
 
         Collections.addAll(myArrayList,"4", "5", "6");
-        System.out.println(myArrayList.toString());
         Collections.addAll(myArrayList,"7", "8", "9");
-        System.out.println(myArrayList.toString());
         Collections.addAll(myArrayList,"10", "11", "12");
-        System.out.println(myArrayList.toString());
+        System.out.println("addAll: "+myArrayList.toString());
 
 
-        List<String> myArrayListDest = new MyArrayList<>();
-        System.out.println(myArrayListDest);
+
+        List<String> myArrayListSrc = new MyArrayList<>();
         for(int i = 0; i < 12; i++) {
-            myArrayListDest.add("dest" + i);
+            myArrayListSrc.add("src" + i);
         }
-        Collections.copy(myArrayListDest,myArrayList);
-        System.out.println(myArrayListDest);
+        Collections.copy(myArrayList,myArrayListSrc);
+        System.out.println("copy: "+myArrayList);
 
         List<Integer> myArrayListSort = new MyArrayList<>();
         for(int i = 0; i < 200; i++) {
-            myArrayListSort.add(((Double) (Math.random()*1000)).intValue());
+            myArrayListSort.add(((Double) (Math.random()*2000)).intValue());
         }
         Collections.sort(myArrayListSort, Integer::compareTo);
-        System.out.println("sorted:" + myArrayListSort);
+        System.out.println("sort: " + myArrayListSort);
 
 
  }

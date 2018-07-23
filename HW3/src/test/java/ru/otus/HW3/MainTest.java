@@ -2,13 +2,13 @@ package ru.otus.HW3;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class MainTest {
+
+
 
     @Test
     public void addGetTest(){
@@ -108,4 +108,6 @@ public class MainTest {
         assertArrayEquals(rez,myArray.toArray());
 
         }
+
+
     }

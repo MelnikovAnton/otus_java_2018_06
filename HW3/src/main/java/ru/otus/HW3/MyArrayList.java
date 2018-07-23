@@ -28,6 +28,13 @@ public class MyArrayList<T> implements List<T> {
         arraySize=DEAFAULT_SIZE;
     }
 
+
+    public MyArrayList(int arraySize) {
+        this.size=0;
+        array = (T[]) new Object[arraySize];
+        this.arraySize=arraySize;
+    }
+
     public MyArrayList(T[] arr) {
         this.size=arr.length;
         array = arr;
