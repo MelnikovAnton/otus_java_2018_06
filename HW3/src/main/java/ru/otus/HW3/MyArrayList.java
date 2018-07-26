@@ -11,34 +11,32 @@ public class MyArrayList<T> implements List<T> {
     private T elm;
 
     private int size;
-    private int arraySize;
+  //  private int arraySize;
     private final int DEAFAULT_SIZE =10;
 
 
     private void grow(){
         T[] oldArr=array;
+        int arraySize = array.length;
         array= (T[]) new Object[arraySize+DEAFAULT_SIZE];
         System.arraycopy(oldArr,0,array,0,oldArr.length);
-        arraySize=array.length;
     }
 
     public MyArrayList() {
         this.size=0;
         array = (T[]) new Object[DEAFAULT_SIZE];
-        arraySize=DEAFAULT_SIZE;
+
     }
 
 
     public MyArrayList(int arraySize) {
         this.size=0;
         array = (T[]) new Object[arraySize];
-        this.arraySize=arraySize;
     }
 
     public MyArrayList(T[] arr) {
         this.size=arr.length;
         array = arr;
-        arraySize=arr.length;
     }
 
     //=================================================
@@ -102,7 +100,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        if (arraySize-size<=0)
+        if (array.length-size<=0)
             grow();
         array[size]=t;
         size++;
@@ -136,7 +134,8 @@ public class MyArrayList<T> implements List<T> {
     public boolean addAll(Collection<? extends T> c) {
         T[] newArr = (T[])c.toArray();
         int len=newArr.length;
-        if (arraySize>(size=newArr.length+size)){
+        size=newArr.length+size;
+        if (array.length>size){
             System.arraycopy(newArr,0,array,0,len);
             return true;
         } else {
@@ -150,7 +149,7 @@ public class MyArrayList<T> implements List<T> {
     public boolean addAll(int index, Collection<? extends T> c) {
         T[] newArr = (T[])c.toArray();
         int len=newArr.length;
-        if (arraySize>(newArr.length+index+size)){
+        if (array.length>(newArr.length+index+size)){
             T[] right = (T[])new Object[size-index];
             System.arraycopy(array,index,right,0,size-index);
             System.arraycopy(newArr,0,array,index,len);
@@ -175,15 +174,14 @@ public class MyArrayList<T> implements List<T> {
     //TODO
     @Override
     public boolean retainAll(Collection<?> c) {
-  //      throw new UnsupportedOperationException();
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void clear() {
         this.size=0;
         this.array = (T[]) new Object[DEAFAULT_SIZE];
-        arraySize=array.length;
+       // arraySize=array.length;
     }
 
     @Override
@@ -199,7 +197,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-        T[] right = (T[])new Object[arraySize-index];
+        T[] right = (T[])new Object[array.length-index];
         System.arraycopy(array,index,right,0,size-index);
         array[index]=element;
         System.arraycopy(right,0,array,index+1,1);
