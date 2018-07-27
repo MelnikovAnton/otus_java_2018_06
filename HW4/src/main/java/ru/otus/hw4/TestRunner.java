@@ -10,20 +10,14 @@ import java.util.Arrays;
 
 public class TestRunner {
 
-    private static Method[] beforeMethods;
-    private static Method[] aftereMethods;
 
-
-
-
-    public static <T> void run(Class<T> clazz){
-      run(clazz,new Object[0]);
+    private TestRunner(){
     }
 
     public static <T> void run(Class<T> clazz, Object... args){
         Method[] testMethods = ReflectionHelper.getAnnotatedMethods(clazz, Test.class);
-        beforeMethods = ReflectionHelper.getAnnotatedMethods(clazz, Before.class);
-        aftereMethods = ReflectionHelper.getAnnotatedMethods(clazz, After.class);
+        Method[] beforeMethods = ReflectionHelper.getAnnotatedMethods(clazz, Before.class);
+        Method[] aftereMethods = ReflectionHelper.getAnnotatedMethods(clazz, After.class);
 
         for (Method m:testMethods){
             T instance = ReflectionHelper.instantiate(clazz, args);
