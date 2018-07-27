@@ -4,9 +4,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 public class ReflectionHelper {
 
+
+    static Method[] getAnnotatedMethods(Class type,Class annotation){
+       return Arrays.stream(type.getMethods())
+                .filter(m->m.isAnnotationPresent(annotation))
+                .toArray(Method[]::new);
+    }
 
 
 
