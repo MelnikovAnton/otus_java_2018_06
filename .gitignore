@@ -17,3 +17,6 @@
 #common
 **/out
 **.class
+
+**/logs/
+**/dumps/
