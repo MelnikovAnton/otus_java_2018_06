@@ -11,9 +11,10 @@ import java.lang.management.MemoryUsage;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public class GcHelper {
 
-    static final Collector collector = new Collector();
+    private static final Collector collector = new Collector();
 
     public static void registerCollector() {
         NotificationListener listener = (notification, handback) -> {
