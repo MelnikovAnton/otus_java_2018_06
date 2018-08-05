@@ -8,6 +8,8 @@ import java.util.Map;
 @SuppressWarnings("WeakerAccess")
 public class Collector {
 
+
+
     public void sendGcInfo(GarbageCollectionNotificationInfo gcInfo){
         String gcName = gcInfo.getGcName();
         String gcAction = gcInfo.getGcAction();
@@ -29,11 +31,15 @@ public class Collector {
                 .mapToLong(MemoryUsage::getUsed)
                 .sum();
 
-        System.out.printf("Before GC: %.1f Mb. After GC: %.1f Mb.\r\n",beforeMb/1_000_000,afterMb/1_000_000);
 
+        GCStat.getGc(gcName).addDuration(duration);
 
-
-
-        System.out.println("start:" + startTime + " Name:" + gcName + ", action:" + gcAction + ", gcCause:" + gcCause + "(" + duration + " ms)");
+//        System.out.printf("Before GC: %.1f Mb. After GC: %.1f Mb.\r\n",beforeMb,afterMb);
+//
+//
+//
+//
+//
+//        System.out.println("start:" + startTime + " Name:" + gcName + ", action:" + gcAction + ", gcCause:" + gcCause + "(" + duration + " ms)");
     }
 }
