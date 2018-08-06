@@ -68,22 +68,22 @@ public class Main {
             e.printStackTrace();
         }
 
-//        ClassLoaderLeaker сLleaker = new ClassLoaderLeaker();
-//        System.out.println(сLleaker.getClass().getClassLoader());
-//        try {
-//            сLleaker.leek();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
- //             leaker.leak();
-
-
+        ClassLoaderLeaker сLleaker = new ClassLoaderLeaker();
+        System.out.println(сLleaker.getClass().getClassLoader());
         try {
-            leaker.newLeaker();
-        } catch (InterruptedException e) {
+            сLleaker.leek();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+ //            leaker.leak();
+
+
+//        try {
+//            leaker.newLeaker();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
 
     }

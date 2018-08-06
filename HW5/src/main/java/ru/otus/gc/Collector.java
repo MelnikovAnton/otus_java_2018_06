@@ -25,25 +25,25 @@ public class Collector {
 
         float beforeMb = before.values().stream()
                 .mapToLong(MemoryUsage::getUsed)
-                .sum();
+                .sum()/(1024f*1024f);
 
         float afterMb = after.values().stream()
                 .mapToLong(MemoryUsage::getUsed)
-                .sum();
+                .sum()/(1024f*1024f);
 
 
         GCStat.getGc(gcName).addDuration(duration);
 
 
         System.out.printf("Before GC: %.1f Mb. After GC: %.1f Mb.\r\n",beforeMb,afterMb);
-        System.out.println("Detail Before:");
-        for (String key:before.keySet()){
-            System.out.println(key +": " + before.get(key).getUsed());
-        }
-        System.out.println("Detail After:");
-        for (String key:after.keySet()){
-            System.out.println(key +": " + after.get(key).getUsed());
-        }
+//        System.out.println("Detail Before:");
+//        for (String key:before.keySet()){
+//            System.out.println(key +": " + before.get(key).getUsed());
+//        }
+//        System.out.println("Detail After:");
+//        for (String key:after.keySet()){
+//            System.out.println(key +": " + after.get(key).getUsed());
+//        }
 //
 //
 //

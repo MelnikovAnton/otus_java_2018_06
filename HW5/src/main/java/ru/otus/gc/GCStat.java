@@ -22,9 +22,10 @@ public class GCStat {
     }
 
     public static void printStatistic(){
-        System.out.println("======================================================");
+        System.out.println("========================START==============================");
        list.values()
                .forEach(System.out::println);
+        System.out.println("==========================END============================");
     }
 
 

@@ -8,6 +8,7 @@ public class SimpleObject {
 
 
     public SimpleObject(){
+        byte[] b = BigStaticClass.getBaytes();
 
     }
 }
