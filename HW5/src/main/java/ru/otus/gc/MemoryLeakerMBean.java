@@ -8,5 +8,5 @@ public interface MemoryLeakerMBean {
 
     void clean();
 
-    int getCount();
+    long getCount();
 }

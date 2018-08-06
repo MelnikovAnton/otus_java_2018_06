@@ -34,12 +34,21 @@ public class Collector {
 
         GCStat.getGc(gcName).addDuration(duration);
 
-//        System.out.printf("Before GC: %.1f Mb. After GC: %.1f Mb.\r\n",beforeMb,afterMb);
+
+        System.out.printf("Before GC: %.1f Mb. After GC: %.1f Mb.\r\n",beforeMb,afterMb);
+        System.out.println("Detail Before:");
+        for (String key:before.keySet()){
+            System.out.println(key +": " + before.get(key).getUsed());
+        }
+        System.out.println("Detail After:");
+        for (String key:after.keySet()){
+            System.out.println(key +": " + after.get(key).getUsed());
+        }
 //
 //
 //
 //
 //
-//        System.out.println("start:" + startTime + " Name:" + gcName + ", action:" + gcAction + ", gcCause:" + gcCause + "(" + duration + " ms)");
+        System.out.println("start:" + startTime + " Name:" + gcName + ", action:" + gcAction + ", gcCause:" + gcCause + "(" + duration + " ms)");
     }
 }

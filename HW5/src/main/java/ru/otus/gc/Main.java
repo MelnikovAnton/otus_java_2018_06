@@ -17,8 +17,11 @@ package ru.otus.gc;
  */
 
 
+import ru.otus.gc.classLoaderLeek.ClassLoaderLeaker;
+
 import javax.management.*;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 
 //GCs:
 /*
@@ -65,9 +68,22 @@ public class Main {
             e.printStackTrace();
         }
 
+//        ClassLoaderLeaker сLleaker = new ClassLoaderLeaker();
+//        System.out.println(сLleaker.getClass().getClassLoader());
+//        try {
+//            сLleaker.leek();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-            leaker.leak();
+ //             leaker.leak();
 
+
+        try {
+            leaker.newLeaker();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
     }
