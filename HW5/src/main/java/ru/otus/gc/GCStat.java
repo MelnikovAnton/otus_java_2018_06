@@ -1,5 +1,6 @@
 package ru.otus.gc;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,17 @@ public class GCStat {
     }
 
     public static void printStatistic(){
-        System.out.println("========================START==============================");
-       list.values()
-               .forEach(System.out::println);
-        System.out.println("==========================END============================");
+        long pid = ProcessHandle.current().pid();
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(pid+".log"), "utf-8"))) {
+            writer.write("========================START==============================");
+            for (GcItem item:list.values()){
+                writer.write(item.toString());
+            }
+            writer.write("==========================END============================");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

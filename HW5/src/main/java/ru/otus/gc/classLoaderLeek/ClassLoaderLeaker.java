@@ -42,7 +42,7 @@ public class ClassLoaderLeaker {
                 obj=null;
             }
 
-Thread.sleep(0,500);
+Thread.sleep(0,200);
         }
 //            Set<Object> set = map.keySet();
 //            System.out.println(set.size());
