@@ -22,7 +22,7 @@ public class ClassLoaderLeaker {
                 CustomClassLoader cl = new CustomClassLoader();
                 Class<?> obj = cl.findClass("ru.otus.gc.classLoaderLeek.SmallObject");
                 try {
-                    map.put(obj.getConstructor().newInstance(),new byte[1024]);
+                    map.put(obj.getConstructor().newInstance(),new byte[2*1024]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -37,12 +37,21 @@ public class ClassLoaderLeaker {
 
             } else {
                 SmallObject obj = new SmallObject();
-                map.put(obj,new byte[1024]);
+                map.put(obj,new byte[2*1024]);
+                //1024 -Time before OOM:159221
+                //2*1024 71268
+                //2*1024 440443 7ns
+                //1450- 109158
              //   System.out.println(obj.getClass().getClassLoader());
                 obj=null;
             }
+//            x/300=1024/159
+//                    1932
+//                    x/300=2048/71
+//                            8610
 
-Thread.sleep(0,200);
+
+Thread.sleep(0,5);
         }
 //            Set<Object> set = map.keySet();
 //            System.out.println(set.size());
