@@ -7,9 +7,6 @@ import javax.management.NotificationListener;
 import javax.management.openmbean.CompositeData;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryUsage;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public class GcHelper {
@@ -20,7 +17,7 @@ public class GcHelper {
         NotificationListener listener = (notification, handback) -> {
             if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
                 GarbageCollectionNotificationInfo gcInfo = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
-                collector.sendGcInfo(gcInfo);
+                collector.setGcInfo(gcInfo);
             }
         };
         for (GarbageCollectorMXBean gcBean : ManagementFactory.getGarbageCollectorMXBeans()){

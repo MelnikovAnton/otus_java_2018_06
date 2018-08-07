@@ -21,7 +21,10 @@ import ru.otus.gc.classLoaderLeek.ClassLoaderLeaker;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Properties;
 
 //GCs:
 /*
@@ -46,13 +49,17 @@ public class Main {
 
     public static void main(String[] args) throws NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException, MalformedObjectNameException {
 
-        try {
-            if (args != null && args.length > 0 && Integer.parseInt(args[0]) >= 0) {
-                Byte_Size = Integer.parseInt(args[0]);
-            } else throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            Byte_Size = 8_000;
-        }
+
+
+
+
+//        try {
+//            if (args != null && args.length > 0 && Integer.parseInt(args[0]) >= 0) {
+//                Byte_Size = Integer.parseInt(args[0]);
+//            } else throw new NumberFormatException();
+//        } catch (NumberFormatException e) {
+//            Byte_Size = 8_000;
+//        }
 
 //        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 //        ObjectName name = new ObjectName("ru.otus:type=MemoryLeaker");
@@ -62,11 +69,11 @@ public class Main {
 
         GcHelper.registerCollector();
 
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(20000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         ClassLoaderLeaker clLeaker = new ClassLoaderLeaker();
      //   System.out.println(clLeaker.getClass().getClassLoader());

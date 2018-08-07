@@ -13,7 +13,7 @@ public class ClassLoaderLeaker {
 
     private static final Map<Object,byte[]> map =new HashMap<>();
 
-    public void leek() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, InterruptedException {
+    public void leek()  {
 
         try {
         while (true) {
@@ -22,27 +22,21 @@ public class ClassLoaderLeaker {
                 CustomClassLoader cl = new CustomClassLoader();
                 Class<?> obj = cl.findClass("ru.otus.gc.classLoaderLeek.SmallObject");
                 try {
-                    map.put(obj.getConstructor().newInstance(),new byte[2*1024]);
+                    map.put(obj.getConstructor().newInstance(),new byte[5*1024]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//            System.out.println(ob.getClassLoader());
                 obj=null;
                 cl=null;
 
             }).start();
 
-     //       System.out.println(map.size());
-
-
+                sleep(5);
             } else {
                 SmallObject obj = new SmallObject();
-                map.put(obj,new byte[2*1024]);
-                //1024 -Time before OOM:159221
-                //2*1024 71268
-                //2*1024 440443 7ns
-                //1450- 109158
-             //   System.out.println(obj.getClass().getClassLoader());
+
+                map.put(obj,new byte[5*1024]);
+
                 obj=null;
             }
 //            x/300=1024/159
@@ -51,48 +45,32 @@ public class ClassLoaderLeaker {
 //                            8610
 
 
-Thread.sleep(0,5);
+
+sleep(5);
+
         }
-//            Set<Object> set = map.keySet();
-//            System.out.println(set.size());
-//            set.forEach(o->{
-//                System.out.println(o + " : " + map.get(o).length + " " +o.getClass().getClassLoader());
-//            });
-//
-//        for (Object o:map.keySet()){
-//
-//        }
-//        map.clear();
-//            System.out.println("+++++++++++++");
-//            for (Object o:map.keySet()){
-//                System.out.println(o + " : " + map.get(o).length);
-//            }
 
     }catch(OutOfMemoryError e){
-
         clean();
         System.out.println("Time before OOM:" + (System.currentTimeMillis()- Main.start));
         GCStat.printStatistic();
-        e.printStackTrace();
+        //e.printStackTrace();
         System.gc();
-   //     Thread.sleep(20_000);
         System.exit(0);
     }
     }
 
     private void clean() {
-
         map.clear();
     }
 
-    private Object getObject(CustomClassLoader cl) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        Class<?> clazz = cl.findClass("ru.otus.gc.classLoaderLeek.SimpleObject");
-       Class<?> clazz1 = cl.findClass("ru.otus.gc.classLoaderLeek.BigStaticClass");
-
-
-    //    clazz.getMethod("m1").invoke(obj);
-        return clazz.getConstructor().newInstance();
-    }
+ private void sleep(long millis){
+     try {
+         Thread.sleep(millis);
+     } catch (InterruptedException e) {
+         e.printStackTrace();
+     }
+ }
 
 
 
