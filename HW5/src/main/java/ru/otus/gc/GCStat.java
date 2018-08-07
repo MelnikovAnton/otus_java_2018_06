@@ -1,13 +1,33 @@
 package ru.otus.gc;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GCStat {
 
 
+    private static String lastGCstart;
+
+    private static final String testName;
+
+    static {
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        List<String> arguments = runtimeMxBean.getInputArguments();
+
+        String result=arguments.stream()
+                .filter(x->x.contains("-XX:"))
+                .map(x->x.substring(4))
+                .collect(Collectors.joining("-"));
+        long pid = ProcessHandle.current().pid();
+        testName=pid + result;
+        System.out.println(testName);
+    }
 
     private GCStat(){}
 
@@ -23,14 +43,15 @@ public class GCStat {
     }
 
     public static void printStatistic(){
-        long pid = ProcessHandle.current().pid();
+
+
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(pid+".log"), "utf-8"))) {
-            writer.write("========================START==============================");
+                new FileOutputStream("GC-Statistics.log")))) {
+            writer.write(testName + "\n");
+            writer.write("time before OOME: " + lastGCstart + "\n");
             for (GcItem item:list.values()){
                 writer.write(item.toString());
             }
-            writer.write("==========================END============================");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,39 +62,46 @@ public class GCStat {
 
     public static class GcItem{
         private int gcCount;
-        private long gcDuration;
+        private String gcTime;
         private String name;
+        private final List<Long> cleanedList = new ArrayList<>();
+        private final List<Long> gcDuration = new ArrayList<>();
+
 
         private GcItem(String name){this.name = name;}
 
-        public void addDuration(long duration){
+        public void setData(long duration, String lastGC, long cleaned){
             gcCount++;
-            gcDuration += duration;
-        }
-
-        public int getGcCount() {
-            return gcCount;
-        }
-
-        public void setGcCount(int gcCount) {
-            this.gcCount = gcCount;
-        }
-
-        public long getGcDuration() {
-            return gcDuration;
-        }
-
-        public void setGcDuration(int gcDuration) {
-            this.gcDuration = gcDuration;
+            gcDuration.add(duration);
+            lastGCstart = lastGC;
+            cleanedList.add(cleaned);
         }
 
         @Override
         public String toString() {
-            return String.format("GC: %s Count: %d Time: %d",name,gcCount,gcDuration);
+            long totalDuration = gcDuration.stream()
+                    .mapToLong(Long::new)
+                    .sum();
+            double avgDuration = gcDuration.stream()
+                    .mapToLong(Long::new)
+                    .average().orElse(0.0);
+
+            long totalMb = cleanedList.stream()
+                    .mapToLong(x -> x)
+                    .sum() / (1024 * 1024);
+
+            long avgMb = cleanedList.stream()
+                    .mapToLong(x -> x)
+                    .sum() / (1024 * 1024);
+
+            return String.format("GC: %s \n" +
+                            "Count: %d \n" +
+                            "Time: %d ms. \n" +
+                            "avgTime: %f ms. \n" +
+                            "Total Memory Collected: %d Mb \n" +
+                            "avg Memory: %d Mb \n" +
+                            "==================================================\n"
+                    ,name,gcCount,totalDuration,avgDuration,totalMb,avgMb);
         }
     }
-
-
-
-
 }

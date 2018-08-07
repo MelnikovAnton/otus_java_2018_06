@@ -12,10 +12,7 @@ public class CustomClassLoader extends ClassLoader {
 
     private static final Map<String,byte[]> classes = new HashMap<>();
     static {
-//        classes.put("ru.otus.gc.classLoaderLeek.SimpleObject",loadClassData("ru.otus.gc.classLoaderLeek.SimpleObject"));
-//        classes.put("ru.otus.gc.classLoaderLeek.BigStaticClass",loadClassData("ru.otus.gc.classLoaderLeek.BigStaticClass"));
         classes.put("ru.otus.gc.classLoaderLeek.SmallObject",loadClassData("ru.otus.gc.classLoaderLeek.SmallObject"));
-
     }
 
     @Override
