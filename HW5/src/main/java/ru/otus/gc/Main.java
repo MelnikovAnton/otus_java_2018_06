@@ -54,10 +54,10 @@ public class Main {
             Byte_Size = 8_000;
         }
 
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("ru.otus:type=MemoryLeaker");
-        MemoryLeaker leaker = new MemoryLeaker(Byte_Size);
-        mbs.registerMBean(leaker, name);
+//        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+//        ObjectName name = new ObjectName("ru.otus:type=MemoryLeaker");
+//        MemoryLeaker leaker = new MemoryLeaker(Byte_Size);
+//        mbs.registerMBean(leaker, name);
 
 
         GcHelper.registerCollector();
@@ -68,10 +68,10 @@ public class Main {
             e.printStackTrace();
         }
 
-        ClassLoaderLeaker сLleaker = new ClassLoaderLeaker();
-        System.out.println(сLleaker.getClass().getClassLoader());
+        ClassLoaderLeaker clLeaker = new ClassLoaderLeaker();
+     //   System.out.println(clLeaker.getClass().getClassLoader());
         try {
-            сLleaker.leek();
+            clLeaker.leek();
         } catch (Exception e) {
             e.printStackTrace();
         }
