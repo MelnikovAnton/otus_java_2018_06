@@ -2,32 +2,36 @@
 
 MEMORY="-Xms512m -Xmx512m -XshowSettings:vm"
 
-GC_LOG=" -verbose:gc -Xlog:gc:./logs/gc_pid_%p.log"
+GC_LOG="-Xlog:gc:./logs/gc_pid_%p.log"
 
-DUMP="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./dumps/"
+#DUMP="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./dumps/"
+
+current_date_time="`date +%Y%m%d%H%M%S`";
+echo $current_date_time;
+
+touch GC-Statistics.log
 
 mvn clean package
 
-#young G1 Young and old G1 Mixed
-GC="-XX:+UseG1GC"
-java $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar>G1.log
+echo -XX:+UseParallelGC -XX:-UseParallelOldGC
+GC='-XX:+UseParallelGC -XX:-UseParallelOldGC'
+java $GC $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar
 
+echo -XX:+UseSerialGC
+GC=-XX:+UseSerialGC
+java $GC $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar
 
-#young Copy and old MarkSweepCompact
-GC="-XX:+UseSerialGC"
-java $MEMORY $GC $GC_LOG $DUMP  -jar target/HW5.jar>UseSerialGC.log
+echo -XX:+UseParallelGC
+GC=-XX:+UseParallelGC
+java $GC $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar
 
+echo -XX:+UseConcMarkSweepGC
+GC=-XX:+UseConcMarkSweepGC
+java $GC $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar
 
-#young PS Scavenge old PS MarkSweep with adaptive sizing
-GC="-XX:+UseParallelGC"
-java $MEMORY $GC $GC_LOG $DUMP  -jar target/HW5.jar>UseParallelGC-UseAdaptiveSizePolicy.log
+echo -XX:+UseG1GC
+GC=-XX:+UseG1GC
+java $GC $MEMORY $GC_LOG $DUMP  -jar target/HW5.jar
 
-#young PS Scavenge old PS MarkSweep, no adaptive sizing
-GC="-XX:+UseParallelGC -XX:-UseParallelOldGC"
-java $MEMORY $GC $GC_LOG $DUMP  -jar target/HW5.jar>UseParallelGC.log
-
-#young ParNew old ConcurrentMarkSweep
-GC="-XX:+UseConcMarkSweepGC"
-java $MEMORY $GC $GC_LOG $DUMP  -jar target/HW5.jar>UseParallelGC.log
-
-
+current_date_time="`date +%Y%m%d%H%M%S`";
+echo $current_date_time;

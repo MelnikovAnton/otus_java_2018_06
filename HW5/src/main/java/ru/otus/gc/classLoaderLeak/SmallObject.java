@@ -1,4 +1,4 @@
-package ru.otus.gc.classLoaderLeek;
+package ru.otus.gc.classLoaderLeak;
 
 public class SmallObject {
 

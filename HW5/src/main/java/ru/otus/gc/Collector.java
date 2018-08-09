@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("WeakerAccess")
 public class Collector {
 
-    public static AtomicBoolean isOOM=new AtomicBoolean(false);
+    public static boolean isOOM=false;
 
     public void setGcInfo(GarbageCollectionNotificationInfo gcInfo) {
-        if (!isOOM.get()) {
+        if (!isOOM) {
             String gcName = gcInfo.getGcName();
 
             long startTime = gcInfo.getGcInfo().getStartTime();
@@ -30,8 +30,7 @@ public class Collector {
                     .mapToLong(MemoryUsage::getUsed)
                     .sum();
 
-            GCStat.getGc(gcName).setData(duration, getTime(startTime),(afterMb-beforeMb));
-
+            GCStat.getGc(gcName).setData(duration, getTime(startTime),(beforeMb-afterMb));
         }
 
     }

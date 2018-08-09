@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("WeakerAccess")
 public class GCStat {
 
+    private static final String filename="GC-Statistics.log";
 
     private static String lastGCstart;
 
@@ -42,11 +44,9 @@ public class GCStat {
         }
     }
 
-    public static void printStatistic(){
+    public static void saveStatisticToFile(){
 
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("GC-Statistics.log")))) {
+        try (FileWriter writer = new FileWriter(filename,true)){
             writer.write(testName + "\n");
             writer.write("time before OOME: " + lastGCstart + "\n");
             for (GcItem item:list.values()){
@@ -60,6 +60,7 @@ public class GCStat {
 
 
 
+    @SuppressWarnings("WeakerAccess")
     public static class GcItem{
         private int gcCount;
         private String gcTime;
@@ -75,6 +76,7 @@ public class GCStat {
             gcDuration.add(duration);
             lastGCstart = lastGC;
             cleanedList.add(cleaned);
+
         }
 
         @Override
@@ -86,20 +88,21 @@ public class GCStat {
                     .mapToLong(Long::new)
                     .average().orElse(0.0);
 
-            long totalMb = cleanedList.stream()
-                    .mapToLong(x -> x)
+            double totalMb = cleanedList.stream()
+                    .mapToDouble(x -> x)
                     .sum() / (1024 * 1024);
 
-            long avgMb = cleanedList.stream()
+            double avgMb = cleanedList.stream()
                     .mapToLong(x -> x)
-                    .sum() / (1024 * 1024);
+                    .average()
+                    .orElse(0)/ (1024 * 1024);
 
             return String.format("GC: %s \n" +
                             "Count: %d \n" +
                             "Time: %d ms. \n" +
                             "avgTime: %f ms. \n" +
-                            "Total Memory Collected: %d Mb \n" +
-                            "avg Memory: %d Mb \n" +
+                            "Total Memory Collected: %f Mb \n" +
+                            "avg Memory: %f Mb \n" +
                             "==================================================\n"
                     ,name,gcCount,totalDuration,avgDuration,totalMb,avgMb);
         }

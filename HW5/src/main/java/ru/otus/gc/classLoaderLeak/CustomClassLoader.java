@@ -1,4 +1,4 @@
-package ru.otus.gc.classLoaderLeek;
+package ru.otus.gc.classLoaderLeak;
 
 import ru.otus.gc.Main;
 
@@ -12,7 +12,7 @@ public class CustomClassLoader extends ClassLoader {
 
     private static final Map<String,byte[]> classes = new HashMap<>();
     static {
-        classes.put("ru.otus.gc.classLoaderLeek.SmallObject",loadClassData("ru.otus.gc.classLoaderLeek.SmallObject"));
+        classes.put("ru.otus.gc.classLoaderLeak.SmallObject",loadClassData("ru.otus.gc.classLoaderLeak.SmallObject"));
     }
 
     @Override
@@ -21,10 +21,10 @@ public class CustomClassLoader extends ClassLoader {
         return defineClass(name, bt, 0, bt.length);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static byte[] loadClassData(String className) {
         try {
-            System.out.println(className + " " + classes.containsKey(className.toString()));
-            if (classes.containsKey(className.toString())) return classes.get(className.toString());
+            if (classes.containsKey(className)) return classes.get(className);
             //read class
             InputStream is = Main.class.getClassLoader().getResourceAsStream(className.replace(".", "/") + ".class");
             ByteArrayOutputStream byteSt = new ByteArrayOutputStream();
