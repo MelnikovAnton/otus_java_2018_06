@@ -1,13 +1,8 @@
 package ru.otus.gc;
 
-import ru.otus.gc.data.BadKey;
-import ru.otus.gc.data.GoodKey;
-import ru.otus.gc.data.Parent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class Leaker implements LeakerMBean {
@@ -22,7 +17,6 @@ public class Leaker implements LeakerMBean {
 
     private int size = 10 * 1024;
 
-    private final Map<Parent, Byte[]> map = new HashMap<>();
     private List<Byte[]> list = new ArrayList<>();
 
 
@@ -73,7 +67,7 @@ public class Leaker implements LeakerMBean {
     //======= Impemementation ===========
     @Override
     public void clean() {
-        map.clear();
+        list.clear();
     }
 
     @Override

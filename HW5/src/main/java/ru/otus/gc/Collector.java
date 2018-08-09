@@ -4,7 +4,7 @@ import com.sun.management.GarbageCollectionNotificationInfo;
 
 import java.lang.management.MemoryUsage;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+
 
 @SuppressWarnings("WeakerAccess")
 public class Collector {

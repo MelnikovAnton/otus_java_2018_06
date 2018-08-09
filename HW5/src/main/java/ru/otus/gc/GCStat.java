@@ -60,7 +60,7 @@ public class GCStat {
 
 
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public static class GcItem{
         private int gcCount;
         private String gcTime;
@@ -79,6 +79,7 @@ public class GCStat {
 
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public String toString() {
             long totalDuration = gcDuration.stream()
