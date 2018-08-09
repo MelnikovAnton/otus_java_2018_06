@@ -18,6 +18,9 @@ public class GCStat {
 
     private static final String testName;
 
+    private static int addedCount;
+    private static int delittedCount;
+
     static {
         RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
         List<String> arguments = runtimeMxBean.getInputArguments();
@@ -44,11 +47,21 @@ public class GCStat {
         }
     }
 
+    public static void setAddedCount(int addedCount) {
+        GCStat.addedCount = addedCount;
+    }
+
+    public static void setDelittedCount(int delittedCount) {
+        GCStat.delittedCount = delittedCount;
+    }
+
     public static void saveStatisticToFile(){
 
         try (FileWriter writer = new FileWriter(filename,true)){
             writer.write(testName + "\n");
             writer.write("time before OOME: " + lastGCstart + "\n");
+            writer.write("Added count: " + addedCount + "\n");
+            writer.write("Delitted count: " + delittedCount +"\n");
             for (GcItem item:list.values()){
                 writer.write(item.toString());
             }

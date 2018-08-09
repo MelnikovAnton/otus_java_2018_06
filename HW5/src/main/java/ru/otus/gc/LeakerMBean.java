@@ -9,4 +9,7 @@ public interface LeakerMBean {
     int getSize();
     void setSize(int size);
 
+    int getAddedCount();
+    int getDelittedCount();
+
 }

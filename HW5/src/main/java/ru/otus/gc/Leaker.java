@@ -19,6 +19,9 @@ public class Leaker implements LeakerMBean {
 
     private List<Byte[]> list = new ArrayList<>();
 
+    private int addedCount = 0;
+    private int delittedCount = 0;
+
 
     public void leak() {
         sleep(10000);
@@ -32,6 +35,7 @@ public class Leaker implements LeakerMBean {
                         i++;
                     }
                 }
+                delittedCount++;
                 sleep(2 * sleep);
             }
         }).start();
@@ -42,15 +46,19 @@ public class Leaker implements LeakerMBean {
                 synchronized (look) {
                     list.add(new Byte[size]);
                 }
+                addedCount++;
                 sleep(sleep);
 
             }
         } catch (OutOfMemoryError e) {
             memmory = null;
             Collector.isOOM = true;
+
             loop = false;
             clean();
             System.out.println("Time before OOM:" + (System.currentTimeMillis() - Main.start));
+            GCStat.setAddedCount(addedCount);
+            GCStat.setDelittedCount(delittedCount);
             GCStat.saveStatisticToFile();
             System.exit(0);
         }
@@ -98,6 +106,16 @@ public class Leaker implements LeakerMBean {
     @Override
     public void setSize(int size) {
         this.size = size;
+    }
+
+    @Override
+    public int getAddedCount() {
+        return addedCount;
+    }
+
+    @Override
+    public int getDelittedCount() {
+        return delittedCount;
     }
 
 
