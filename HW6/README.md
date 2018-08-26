@@ -5,3 +5,10 @@
 если элемента нет в кэше записываю его в кэш.
 ***
 В результате выполнения теста лучшие результаты показал _eternalCache_.
+Никакого приемущества не дало использование _lifeCache_ в моем примере.
+<br/>
+MainTest.lifeCache          4m 43s <br/>
+MainTest.minHitCache        5m 01s<br/>
+MainTest.eternalCache       3m 43s<br/>
+MainTest.idleCache          3m 58s<br/>
+MainTest.noCache            4m 36s

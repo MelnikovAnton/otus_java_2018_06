@@ -58,7 +58,7 @@ public class MainTest {
             LageElement elm = cache.get(i);
             String value = (elm == null) ? "null": "LageObject";
 
-            logger.info(i+ " " + value );
+//            logger.info(i+ " " + value );
         }
 
         logger.info("Cache hit " +cache.getHitCount());
@@ -152,10 +152,10 @@ public class MainTest {
     }
 
     @Test
-    public void nullCache(){
+    public void minHitCache(){
         long testStart=System.currentTimeMillis();
-        int size = 1;
-        CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 0, 0, true);
+        int size = 200;
+        CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 1, 0, false);
         GetElementsWithCache action = new GetElementsWithCache(cache);
         for (int i=0; i<10000;i++){
             //          long start=System.currentTimeMillis();
@@ -166,6 +166,31 @@ public class MainTest {
 //            logger.info("Cache size: " + cache.getSize());
 //            logger.info("Cache hits: " + cache.getHitCount());
 //            logger.info("Cache misses: " + cache.getMissCount());
+        }
+
+        logger.info("Cache hits: " + cache.getHitCount());
+        logger.info("Cache misses: " + cache.getMissCount());
+
+        long testTime = System.currentTimeMillis()-testStart;
+        logger.info("It takes " + testTime);
+
+        logger.info("from cache: " + action.getFromCache());
+        logger.info("from disk: " + action.getFromDisk());
+
+
+    }
+
+
+    @Test
+    public void noCache(){
+        long testStart=System.currentTimeMillis();
+        int size = 200;
+        CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 1, 0, false);
+        GetElementsWithCache action = new GetElementsWithCache(cache);
+        for (int i=0; i<10000;i++){
+            //          long start=System.currentTimeMillis();
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
+            action.getFromDisk(Integer.toString(randomNum));
         }
 
         logger.info("Cache hits: " + cache.getHitCount());

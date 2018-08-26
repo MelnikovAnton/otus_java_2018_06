@@ -36,7 +36,7 @@ public class GetElementsWithCache {
         return element;
     }
 
-    private Element getFromDisk(String key){
+    public Element getFromDisk(String key){
         try (ObjectInputStream ois =
                      new ObjectInputStream(new FileInputStream("diskData.ser"))) {
             DiskData dataObj= (DiskData) ois.readObject();
