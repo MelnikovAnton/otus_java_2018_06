@@ -3,22 +3,19 @@ package ru.otus.cash.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.cash.CacheEngine;
-import ru.otus.cash.MyElement;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
-public class GetElementsWithCache {
-    private static Logger logger = LoggerFactory.getLogger(GetElementsWithCache.class);
+public class ElementService {
+    private static Logger logger = LoggerFactory.getLogger(ElementService.class);
 
     private int fromCache = 0;
     private  int fromDisk = 0;
 
     private final CacheEngine<String,Element> cache;
 
-    public GetElementsWithCache(CacheEngine cache) {
+    public ElementService(CacheEngine cache) {
         this.cache=cache;
     }
 

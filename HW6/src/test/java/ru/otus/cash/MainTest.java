@@ -6,13 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.cash.data.DiskData;
 import ru.otus.cash.data.Element;
-import ru.otus.cash.data.GetElementsWithCache;
+import ru.otus.cash.data.ElementService;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.junit.Assert.*;
 
 /**
  *   VM options: -Xmx256m -Xms256m
@@ -73,7 +71,7 @@ public class MainTest {
         long testStart=System.currentTimeMillis();
         int size = 200;
         CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 0, 0, true);
-        GetElementsWithCache action = new GetElementsWithCache(cache);
+        ElementService action = new ElementService(cache);
         for (int i=0; i<10000;i++){
  //           long start=System.currentTimeMillis();
             int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
@@ -100,7 +98,7 @@ public class MainTest {
         long testStart=System.currentTimeMillis();
         int size = 200;
         CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 1000, 0, false);
-        GetElementsWithCache action = new GetElementsWithCache(cache);
+        ElementService action = new ElementService(cache);
         for (int i=0; i<10000;i++){
   //          long start=System.currentTimeMillis();
             int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
@@ -129,7 +127,7 @@ public class MainTest {
         long testStart=System.currentTimeMillis();
         int size = 200;
         CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 0, 30000, false);
-        GetElementsWithCache action = new GetElementsWithCache(cache);
+        ElementService action = new ElementService(cache);
         for (int i=0; i<10000;i++){
   //          long start=System.currentTimeMillis();
             int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
@@ -156,7 +154,7 @@ public class MainTest {
         long testStart=System.currentTimeMillis();
         int size = 200;
         CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 1, 0, false);
-        GetElementsWithCache action = new GetElementsWithCache(cache);
+        ElementService action = new ElementService(cache);
         for (int i=0; i<10000;i++){
             //          long start=System.currentTimeMillis();
             int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
@@ -186,7 +184,7 @@ public class MainTest {
         long testStart=System.currentTimeMillis();
         int size = 200;
         CacheEngine<String, Element> cache = new CacheEngineImpl<>(size, 1, 0, false);
-        GetElementsWithCache action = new GetElementsWithCache(cache);
+        ElementService action = new ElementService(cache);
         for (int i=0; i<10000;i++){
             //          long start=System.currentTimeMillis();
             int randomNum = ThreadLocalRandom.current().nextInt(0, 1001);
