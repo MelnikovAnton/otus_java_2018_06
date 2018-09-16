@@ -24,7 +24,7 @@ public class AtmImpl implements Atm {
             initialState.add(box.copyBox());
         }
         this.banknoteBoxes = banknoteBoxes.stream()
-                .collect(Collectors.toMap(BanknoteBox::getBancnote, Function.identity()));
+                .collect(Collectors.toMap(BanknoteBox::getNominal, Function.identity()));
     }
 
     @Override

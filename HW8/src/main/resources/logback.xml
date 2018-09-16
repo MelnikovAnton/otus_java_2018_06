@@ -27,7 +27,7 @@
     <!--</logger>-->
 
 
-    <logger name="ru.otus.atm" level="debug" additivity="false">
+    <logger name="ru.otus.atmdepartment" level="debug" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 

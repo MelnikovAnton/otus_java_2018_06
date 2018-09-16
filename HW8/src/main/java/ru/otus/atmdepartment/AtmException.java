@@ -1,4 +1,4 @@
-package ru.otus.atm;
+package ru.otus.atmdepartment;
 
 public class AtmException extends Exception {
 

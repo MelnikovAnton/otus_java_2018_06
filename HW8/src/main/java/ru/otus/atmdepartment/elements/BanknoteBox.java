@@ -1,7 +1,7 @@
-package ru.otus.atm.elements;
+package ru.otus.atmdepartment.elements;
 
-import ru.otus.atm.AtmException;
-import ru.otus.atm.nominals.Bancnote;
+import ru.otus.atmdepartment.AtmException;
+import ru.otus.atmdepartment.nominals.Bancnote;
 
 import java.util.*;
 

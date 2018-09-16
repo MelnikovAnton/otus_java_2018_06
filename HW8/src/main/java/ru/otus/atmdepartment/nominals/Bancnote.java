@@ -1,4 +1,4 @@
-package ru.otus.atm.nominals;
+package ru.otus.atmdepartment.nominals;
 
 public enum Bancnote {
 

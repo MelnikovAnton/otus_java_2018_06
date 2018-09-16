@@ -1,7 +1,9 @@
-package ru.otus.atm;
+package ru.otus.atmdepartment;
 
-import ru.otus.atm.elements.BanknoteBox;
-import ru.otus.atm.nominals.Bancnote;
+
+
+import ru.otus.atmdepartment.elements.BanknoteBox;
+import ru.otus.atmdepartment.nominals.Bancnote;
 
 import java.util.List;
 import java.util.Map;
