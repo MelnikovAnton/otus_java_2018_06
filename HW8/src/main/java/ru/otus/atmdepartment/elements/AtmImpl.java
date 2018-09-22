@@ -4,7 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.atmdepartment.Atm;
 import ru.otus.atmdepartment.AtmException;
-import ru.otus.atmdepartment.nominals.Bancnote;
+import ru.otus.atmdepartment.AtmModeException;
+import ru.otus.atmdepartment.nominals.Banknote;
 
 import java.util.*;
 import java.util.function.Function;
@@ -17,9 +18,10 @@ public class AtmImpl implements Atm {
 
     private  final Set<BanknoteBox> initialState = new HashSet<>();
 
-    private  Map<Bancnote, BanknoteBox> banknoteBoxes;
+    private  Map<Banknote, BanknoteBox> banknoteBoxes;
 
     public AtmImpl(final Set<BanknoteBox> banknoteBoxes) {
+
         for (BanknoteBox box:banknoteBoxes){
             initialState.add(box.copyBox());
         }
@@ -37,31 +39,31 @@ public class AtmImpl implements Atm {
     }
 
     @Override
-    public List<Bancnote> getMoney(int amount) throws AtmException {
-        if (isServiceMode) throw new AtmException("Atm in Service mode");
-        Map<Bancnote, Integer> giveBancnote = getBancnoteSet(amount);
+    public List<Banknote> getMoney(int amount) throws AtmException {
+        if (isServiceMode) throw new AtmModeException("Atm in Service mode");
+        Map<Banknote, Integer> giveBancnote = getBancnoteSet(amount);
         return giveBancnote.keySet().stream()
                .flatMap(n-> banknoteBoxes.get(n).getBancnotes(giveBancnote.get(n)).stream())
                .collect(Collectors.toList());
     }
 
 
-    private Map<Bancnote, Integer> getBancnoteSet(int amount) throws AtmException {
+    private Map<Banknote, Integer> getBancnoteSet(int amount) throws AtmException {
 
         Object[] array = banknoteBoxes.keySet().stream()
                 .filter(x -> (x.getValue() < amount))
                 .sorted((a, b) -> b.getValue() - a.getValue())
                 .toArray();
         int ostatok = amount;
-        Map<Bancnote, Integer> moneyMap = new HashMap<>();
+        Map<Banknote, Integer> moneyMap = new HashMap<>();
         for (Object n : array) {
-            Bancnote bancnote = (Bancnote) n;
-            int needed = ostatok / bancnote.getValue();
+            Banknote banknote = (Banknote) n;
+            int needed = ostatok / banknote.getValue();
             int total = banknoteBoxes.get(n).getCount();
             int canGive = (needed < total) ? needed : total;
-            if (total > 0) moneyMap.put(bancnote, canGive);
-            ostatok = ostatok - canGive * bancnote.getValue();
-           logger.info("Нужно " + needed + " по " + bancnote.getValue() + " остаток " + ostatok);
+            if (total > 0) moneyMap.put(banknote, canGive);
+            ostatok = ostatok - canGive * banknote.getValue();
+           logger.info("Нужно " + needed + " по " + banknote.getValue() + " остаток " + ostatok);
         }
         if (ostatok == 0) return moneyMap;
             else throw new AtmException("Cannot give money");
@@ -69,13 +71,13 @@ public class AtmImpl implements Atm {
 
 
     @Override
-    public void putMoney(List<Bancnote> banknotes) throws AtmException {
-        if (isServiceMode) throw new AtmException("Atm in Service mode");
-        Map<Bancnote, Integer> map = banknotes.stream()
+    public void putMoney(List<Banknote> banknotes) throws AtmException {
+        if (isServiceMode) throw new AtmModeException("Atm in Service mode");
+        Map<Banknote, Integer> map = banknotes.stream()
                 .collect(Collectors.toMap(Function.identity(), c -> Integer.valueOf(1),
                         (c1, c2) -> Integer.valueOf(c1 + c2)));
 
-//        for (Bancnote key : map.keySet()) {
+//        for (Banknote key : map.keySet()) {
 //            logger.info(key.name() + " , " + map.get(key));
 //        }
 
@@ -83,21 +85,21 @@ public class AtmImpl implements Atm {
         if (!banknoteBoxes.keySet().containsAll(map.keySet())) throw new AtmException("No box for bancnote");
         if (!canPutMoney(map)) throw new AtmException("Cannot put money");
 
-        for (Bancnote bancnote : map.keySet()) {
-            banknoteBoxes.get(bancnote).putBancknotes(map.get(bancnote));
+        for (Banknote banknote : map.keySet()) {
+            banknoteBoxes.get(banknote).putBanknotes(map.get(banknote));
         }
     }
 
     @Override
-    public Map<Bancnote,Integer> report() {
+    public Map<Banknote,Integer> report() {
         return banknoteBoxes.keySet().stream()
                 .collect(Collectors.toMap(Function.identity(),n->banknoteBoxes.get(n).getCount()));
     }
 
-    private boolean canPutMoney(Map<Bancnote, Integer> money) {
+    private boolean canPutMoney(Map<Banknote, Integer> money) {
         boolean canPutMoney = true;
-        for (Bancnote bancnote : money.keySet()) {
-            canPutMoney = canPutMoney && checkBox(banknoteBoxes.get(bancnote), money.get(bancnote));
+        for (Banknote banknote : money.keySet()) {
+            canPutMoney = canPutMoney && checkBox(banknoteBoxes.get(banknote), money.get(banknote));
         }
         return canPutMoney;
     }
@@ -119,7 +121,7 @@ public class AtmImpl implements Atm {
 
     @Override
     public void encashment(Set<BanknoteBox> set) throws AtmException {
-        if (!isServiceMode) throw new AtmException("Atm is not in service mode");
+        if (!isServiceMode) throw new AtmModeException("Atm is not in service mode");
         this.banknoteBoxes = set.stream()
                 .collect(Collectors.toMap(BanknoteBox::getNominal, Function.identity()));
     }
@@ -130,6 +132,9 @@ public class AtmImpl implements Atm {
         this.banknoteBoxes.clear();
 
         this.banknoteBoxes = initialState.stream()
-                .collect(Collectors.toMap(BanknoteBox::getNominal, Function.identity()));
+                .collect(Collectors.toMap(BanknoteBox::getNominal, Function.identity().andThen(x->{
+                    BanknoteBox b = (BanknoteBox) x;
+                    return b.copyBox();
+                })));
     }
 }

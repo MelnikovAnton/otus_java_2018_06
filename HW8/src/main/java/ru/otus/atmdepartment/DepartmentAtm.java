@@ -5,13 +5,13 @@ import java.util.List;
 
 public class DepartmentAtm {
 
-    List<Atm> atms;
+    private List<Atm> atms;
 
     public DepartmentAtm (List<Atm> list){
         this.atms=list;
     }
 
-    public int getBalanse(){
+    public int getBalance(){
         int result=0;
         for (Atm atm:atms){
             result +=atm.getBalance();
