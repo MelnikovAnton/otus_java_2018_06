@@ -9,19 +9,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "unchecked"})
 public class MyJson {
 
-    private static final Set objects = new HashSet();
+  //  private static final Set objects = new HashSet();
+  //  private static final Set keys = new HashSet();
 
 
     public static JsonObject toJson(Object o) throws IllegalAccessException {
         JsonObjectBuilder jsonRootBuilder = Json.createObjectBuilder();
         if (o == null) return jsonRootBuilder.build();
         Class clazz = o.getClass();
-        objects.add(o);
+   //     objects.add(o);
         for (Field f : clazz.getDeclaredFields()) {
             int modifiers = f.getModifiers();
-            if (!Modifier.isTransient(modifiers) && !Modifier.isStatic(modifiers)) {
+       //     System.out.println(Modifier.toString(modifiers) + " " + f.getName());
+boolean check = Modifier.isTransient(modifiers) || Modifier.isStatic(modifiers) || "this$0".equals(f.getName());
+
+            if (!check) {
                 Class<?> type = f.getType();
                 f.setAccessible(true);
                 //  if (type.equals(String.class)) jsonBuilder=getJsonStringValue(jsonBuilder,f.getName(),f.get(o).toString());
@@ -59,7 +64,7 @@ public class MyJson {
 
     private static JsonObjectBuilder getJsonArrayValue(JsonObjectBuilder builder, String key, Collection collection) {
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-        collection.stream()
+        collection
                 .forEach(x -> {
                     try {
                         addValue(arrBuilder, x);
@@ -72,7 +77,7 @@ public class MyJson {
 
     private static JsonArrayBuilder getJsonArrayValue(JsonArrayBuilder builder, Collection collection) {
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-        collection.stream()
+        collection
                 .forEach(x -> {
                     try {
                         addValue(arrBuilder, x);
@@ -118,14 +123,20 @@ public class MyJson {
             return builder.add(key,getJsonMapValue((Map) value));
         }
 
-        return (checkUsed(value)) ? builder.add(key, toJson(value)) : builder;
+    //    return (checkUsed(value,key)) ? builder.add(key, toJson(value)) : builder;
+        return builder.add(key, toJson(value));
     }
 
-    private static Boolean checkUsed(Object o) {
-        if (objects.contains(o)) return false;
-        objects.add(o);
-        return true;
-    }
+//    private static Boolean checkUsed(Object o,String key) {
+//        if (objects.contains(o) && keys.contains(key)) {
+//
+//            System.out.println(o.getClass().getName() +"  =   "+ key);
+//            return false;
+//        }
+//        objects.add(o);
+//        keys.add(key);
+//        return true;
+//    }
 
     private static JsonArrayBuilder addValue(JsonArrayBuilder builder, Object value) throws IllegalAccessException {
         if (value instanceof Integer) {
@@ -161,7 +172,8 @@ public class MyJson {
             return builder.add(getJsonMapValue((Map) value));
         }
 
-        return (checkUsed(value)) ? builder.add(toJson(value)) : builder;
+      //  return (checkUsed(value,"")) ? builder.add(toJson(value)) : builder;
+        return builder.add(toJson(value));
 
     }
 }

@@ -15,8 +15,13 @@ public class MyJsonObject {
 
     private String nullVal;
 
+    private String this$0="this$123";
+
+//    private Excluder excluder1;
+//    private Excluder excluder2;
+
  //   private Excluder excluder=new Excluder();
-    private Object obj= new Object();
+    private final Object obj= new Object();
 
     private Map<String,String> map = new HashMap<>();
 
@@ -31,12 +36,15 @@ public class MyJsonObject {
         map.put("one","1");
         this.listList.add(list);
         this.listList.add(list);
+//        excluder1=new Excluder();
+//        excluder2=excluder1;
     }
 
 
     private final class SubClass{
         private String str="sub string";
         private int i=5;
+    //    private String this$0 ="this0";
     }
 
     @Override

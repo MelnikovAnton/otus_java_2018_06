@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,18 @@ public class Main {
         list.add("2");
 
         MyJsonObject obj = new MyJsonObject(list);
-
+        try {
+            Field f = obj.getClass().getDeclaredField("subObj");
+            Class<?> cl = f.getType();
+            System.out.println(cl.getName());
+            System.out.println(cl.isLocalClass());
+            Class<?>[] c = obj.getClass().getDeclaredClasses();
+            for(Class cc:c){
+                System.out.println("sub "+cc.getName());
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         Gson gson = new Gson();
         String str = gson.toJson(obj);
