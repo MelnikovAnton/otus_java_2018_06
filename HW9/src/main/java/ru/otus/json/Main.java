@@ -17,18 +17,6 @@ public class Main {
         list.add("2");
 
         MyJsonObject obj = new MyJsonObject(list);
-        try {
-            Field f = obj.getClass().getDeclaredField("subObj");
-            Class<?> cl = f.getType();
-            System.out.println(cl.getName());
-            System.out.println(cl.isLocalClass());
-            Class<?>[] c = obj.getClass().getDeclaredClasses();
-            for(Class cc:c){
-                System.out.println("sub "+cc.getName());
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
 
         Gson gson = new Gson();
         String str = gson.toJson(obj);
