@@ -1,11 +1,9 @@
-package ru.otus.myORM.models;
-
-import java.sql.ResultSet;
+package MyORM2.models;
 
 public abstract class DataSet {
     private long id;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

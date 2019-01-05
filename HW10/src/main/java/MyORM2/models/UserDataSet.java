@@ -1,4 +1,4 @@
-package ru.otus.myORM.models;
+package MyORM2.models;
 
 public class UserDataSet extends DataSet {
 
