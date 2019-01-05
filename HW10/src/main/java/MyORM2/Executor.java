@@ -41,5 +41,20 @@ public class Executor {
 
     }
 
+    public <T> List<T> execQuery(String query,Object value, ResultHandler<T> handler) throws MyDBException {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1,value);
+            preparedStatement.executeQuery();
+
+            ResultSet rs = preparedStatement.getResultSet();
+            List<T> rez = handler.handle(rs);
+            if (rez.size()==0) throw new MyDBException("No result found");
+            return rez;
+        } catch (IllegalAccessException | InvocationTargetException | SQLException | InstantiationException e) {
+            e.printStackTrace();
+            throw new MyDBException("Cannot execute Query \n" + query );
+        }
+    }
+
 
 }

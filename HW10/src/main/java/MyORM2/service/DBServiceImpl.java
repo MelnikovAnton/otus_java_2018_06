@@ -8,7 +8,6 @@ import MyORM2.helpers.DBHelper;
 import MyORM2.models.DataSet;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -19,19 +18,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class DBServiceImpl implements DBService {
     private final Connection connection = ConnectionHelper.getConnection();
 
     @Override
     public <T extends DataSet> void save(T dataset) throws MyDBException {
-        System.out.println(dataset);
-        String sql=DBHelper.getInsertSQL(dataset.getClass());
+        String sql = DBHelper.getInsertSQL(dataset.getClass());
 
         DBHelper.getFieldValues(dataset);
         Executor executor = new Executor(getConnection());
         try {
             int key = executor.execUpdate(sql, DBHelper.getFieldValues(dataset));
-            System.out.println("ID = " +key);
             dataset.setId(key);
         } catch (MyDBException e) {
             e.printStackTrace();
@@ -41,25 +39,65 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public <T extends DataSet> T load(long id, Class<T> clazz) throws MyDBException {
-        String sql=DBHelper.getSelectQuery(clazz);
+    public <T extends DataSet> List<T> load(long id, Class<T> clazz) throws MyDBException {
+        String sql = DBHelper.getSelectQuery(clazz);
+        sql=sql.substring(0,sql.length()-1).concat( " where id = ? ;");
         Executor executor = new Executor(getConnection());
         Mapper mapper = new Mapper(clazz);
-        List<DataSet> result;
-        if (id == 0) result=executor.execQuery(sql, rs->{
-            List<DataSet> rez= new ArrayList<>();
+        List<DataSet> result = executor.execQuery(sql,id, rs -> {
+            List<DataSet> rez = new ArrayList<>();
             while (rs.next()) {
 
                 DataSet instance = mapper.getInstanse(rs);
                 rez.add(instance);
-                System.out.println(instance);
             }
             return rez;
         });
+        if (result.size() == 0) throw new MyDBException("DataSet with id " + id + " not found");
 
-
-        return null;
+        return (List<T>) result;
     }
+
+    @Override
+    public <T extends DataSet> List<T> loadByName(String name, Class<T> clazz) throws MyDBException {
+        String sql = DBHelper.getSelectQuery(clazz);
+        sql=sql.substring(0,sql.length()-1).concat( " where name = ? ;");
+        Executor executor = new Executor(getConnection());
+        Mapper mapper = new Mapper(clazz);
+        List<DataSet> result = executor.execQuery(sql,name, rs -> {
+            List<DataSet> rez = new ArrayList<>();
+            while (rs.next()) {
+
+                DataSet instance = mapper.getInstanse(rs);
+                rez.add(instance);
+            }
+            return rez;
+        });
+        if (result.size() == 0) throw new MyDBException("DataSet with name " + name + " not found");
+
+        return (List<T>) result;
+    }
+
+
+    @Override
+    public <T extends DataSet> List<T> loadAll(Class<T> clazz) throws MyDBException {
+        String sql = DBHelper.getSelectQuery(clazz);
+        Executor executor = new Executor(getConnection());
+        Mapper mapper = new Mapper(clazz);
+        List<DataSet> result = executor.execQuery(sql, rs -> {
+            List<DataSet> rez = new ArrayList<>();
+            while (rs.next()) {
+
+                DataSet instance = mapper.getInstanse(rs);
+                rez.add(instance);
+            }
+            return rez;
+        });
+        if (result.size() == 0) throw new MyDBException("No Data for " + clazz.getName());
+
+        return (List<T>) result;
+    }
+
 
     @Override
     public void truncateTable(Class clazz) throws MyDBException {
@@ -76,9 +114,8 @@ public class DBServiceImpl implements DBService {
 
     @Override
     public void dropTable(Class clazz) throws MyDBException {
-        PreparedStatement ps = null;
         try {
-            ps = connection.prepareStatement(DBHelper.getDropTable(clazz));
+            PreparedStatement  ps = connection.prepareStatement(DBHelper.getDropTable(clazz));
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,11 +160,12 @@ public class DBServiceImpl implements DBService {
         connection.close();
     }
 
-    public Connection getConnection() {
+    private Connection getConnection() {
         return connection;
     }
 
-    private class  Mapper<T extends DataSet> {
+    @SuppressWarnings("TypeParameterHidesVisibleType")
+    private class Mapper<T extends DataSet> {
 
         private final Constructor<? extends DataSet> constr;
 
@@ -176,7 +214,7 @@ public class DBServiceImpl implements DBService {
                 } else if ("long".equals(type) || "Long".equals(type)) {
                     method.invoke(o, rs.getLong(columnName));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new MyDBException("Type not supported");
             }
@@ -193,7 +231,7 @@ public class DBServiceImpl implements DBService {
 
         private Method getSetter(String name) throws MyDBException {
             return Arrays.stream(methods)
-                    .filter(m -> m.getName().toLowerCase().contains(name))
+                    .filter(m -> m.getName().toLowerCase().contains(name.toLowerCase()))
                     .filter(m -> m.getName().contains("set"))
                     .findFirst().orElseThrow(() -> new MyDBException("Setter not found"));
 

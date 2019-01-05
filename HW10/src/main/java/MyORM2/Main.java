@@ -14,11 +14,22 @@ public class Main {
         dbService.createTable(UserDataSet.class);
 
         dbService.save(new UserDataSet("Vasya Pupkin",21));
+        dbService.save(new UserDataSet("Ivanov Ivan Ivanovich",51));
 
-        System.out.println(dbService.load(0,UserDataSet.class));
+        System.out.println("Find all:");
+        System.out.println(dbService.loadAll(UserDataSet.class));
 
-//             dbService.truncateTable(UserDataSet.class);
-//        dbService.dropTable(UserDataSet.class);
+        System.out.println("Find by ID:");
+        System.out.println(dbService.load(1,UserDataSet.class));
+
+
+        System.out.println("Find by name:");
+        System.out.println(dbService.loadByName("Vasya Pupkin",UserDataSet.class));
+
+        System.out.println("");
+
+        dbService.truncateTable(UserDataSet.class);
+        dbService.dropTable(UserDataSet.class);
 
 
 

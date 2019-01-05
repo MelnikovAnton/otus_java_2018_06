@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class DBHelper {
     public static String getTruncateTable(Class<? extends DataSet> clazz) {
-        String sql = "truncate %s";
+        String sql = "truncate table %s";
         return String.format(sql, clazz.getSimpleName());
     }
 
