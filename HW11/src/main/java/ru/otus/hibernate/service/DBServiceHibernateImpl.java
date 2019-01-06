@@ -45,8 +45,8 @@ public class DBServiceHibernateImpl implements DBService {
 //        configuration.setProperty("hibernate.connection.username", "ivr");
 //        configuration.setProperty("hibernate.connection.password", "ivr");
 
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.format_sql", "true");
+        configuration.setProperty("hibernate.show_sql", "false");
+        configuration.setProperty("hibernate.format_sql", "false");
         configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         configuration.setProperty("hibernate.enable_lazy_load_no_trans","true");
 
