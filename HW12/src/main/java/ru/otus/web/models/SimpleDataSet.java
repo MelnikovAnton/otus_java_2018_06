@@ -1,4 +1,4 @@
-package ru.otus.hibernate.models;
+package ru.otus.web.models;
 
 import javax.persistence.Entity;
 

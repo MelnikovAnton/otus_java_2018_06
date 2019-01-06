@@ -1,9 +1,9 @@
-package ru.otus.hibernate.service;
+package ru.otus.web.service;
 
 
 
-import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.models.DataSet;
+import ru.otus.web.exceptions.MyDBException;
+import ru.otus.web.models.DataSet;
 
 import java.util.List;
 

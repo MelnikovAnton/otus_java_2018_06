@@ -1,4 +1,4 @@
-package ru.otus.hibernate.service;
+package ru.otus.web.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,10 +8,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.hibernate.DAO.DataSetDAO;
-import ru.otus.hibernate.DAO.UserDAO;
-import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.models.*;
+import ru.otus.web.DAO.DataSetDAO;
+import ru.otus.web.DAO.UserDAO;
+import ru.otus.web.exceptions.MyDBException;
+import ru.otus.web.models.*;
 
 import java.util.ArrayList;
 import java.util.List;

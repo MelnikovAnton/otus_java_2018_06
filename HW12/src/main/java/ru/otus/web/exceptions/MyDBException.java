@@ -1,4 +1,4 @@
-package ru.otus.hibernate.exceptions;
+package ru.otus.web.exceptions;
 
 public class MyDBException extends Exception {
 

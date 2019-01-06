@@ -1,17 +1,13 @@
-package ru.otus.hibernate;
+package ru.otus.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.models.AddressDataSet;
-import ru.otus.hibernate.models.PhoneDataSet;
-import ru.otus.hibernate.models.SimpleDataSet;
-import ru.otus.hibernate.models.UserDataSet;
-import ru.otus.hibernate.service.DBService;
-import ru.otus.hibernate.service.DBServiceHibernateImpl;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.otus.web.exceptions.MyDBException;
+import ru.otus.web.models.AddressDataSet;
+import ru.otus.web.models.SimpleDataSet;
+import ru.otus.web.models.UserDataSet;
+import ru.otus.web.service.DBService;
+import ru.otus.web.service.DBServiceHibernateImpl;
 
 public class MainHibernate {
     private static Logger logger = LoggerFactory.getLogger(MainHibernate.class);
