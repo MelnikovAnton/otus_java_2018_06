@@ -1,0 +1,59 @@
+package ru.otus.hibernate.myORM;
+
+
+
+
+import ru.otus.hibernate.exceptions.MyDBException;
+import ru.otus.hibernate.myORM.helpers.ResultHandler;
+
+import java.lang.reflect.InvocationTargetException;
+import java.sql.*;
+import java.util.List;
+
+public class Executor {
+    private final Connection connection;
+
+    public Executor(Connection connection){
+        this.connection=connection;
+    }
+
+    public int execUpdate(String sql, Object ... values) throws MyDBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < values.length; i++) {
+                preparedStatement.setObject(i + 1, values[i]);
+            }
+            preparedStatement.executeUpdate();
+            ResultSet result = preparedStatement.getGeneratedKeys();
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException e) {
+            throw new MyDBException("Cannot execute update",e);
+        }
+    }
+
+    public<T> List<T> execQuery(String query, ResultHandler<T> handler) throws MyDBException {
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.executeQuery();
+            return handler.handle(stmt.getResultSet());
+        } catch (IllegalAccessException | InstantiationException | SQLException | InvocationTargetException e) {
+            throw new MyDBException("cannot exec Query",e);
+        }
+
+    }
+
+    public <T> List<T> execQuery(String query,Object value, ResultHandler<T> handler) throws MyDBException {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1,value);
+            preparedStatement.executeQuery();
+
+            ResultSet rs = preparedStatement.getResultSet();
+            List<T> rez = handler.handle(rs);
+            if (rez.size()==0) throw new MyDBException("No result found",new Exception());
+            return rez;
+        } catch (IllegalAccessException | InvocationTargetException | SQLException | InstantiationException e) {
+            throw new MyDBException("Cannot execute Query \n" + query ,e);
+        }
+    }
+
+
+}
