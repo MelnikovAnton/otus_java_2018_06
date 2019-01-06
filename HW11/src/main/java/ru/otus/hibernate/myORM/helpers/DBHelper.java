@@ -3,7 +3,7 @@ package ru.otus.hibernate.myORM.helpers;
 
 
 import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.myORM.models.DataSet;
+import ru.otus.hibernate.models.DataSet;
 
 
 import java.lang.reflect.Field;

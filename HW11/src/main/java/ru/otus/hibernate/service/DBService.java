@@ -3,7 +3,7 @@ package ru.otus.hibernate.service;
 
 
 import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.myORM.models.DataSet;
+import ru.otus.hibernate.models.DataSet;
 
 import java.util.List;
 
@@ -16,4 +16,5 @@ public interface DBService extends AutoCloseable {
     void dropTable(Class clazz) throws MyDBException;
     void createTable(Class clazz) throws MyDBException;
     String getMetadata() throws MyDBException;
+    <T extends DataSet> long getCount(Class<T> clazz) throws MyDBException;
 }

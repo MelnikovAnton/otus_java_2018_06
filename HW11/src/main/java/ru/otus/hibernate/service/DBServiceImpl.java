@@ -3,11 +3,12 @@ package ru.otus.hibernate.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.hibernate.models.UserDataSet;
 import ru.otus.hibernate.myORM.Executor;
 import ru.otus.hibernate.exceptions.MyDBException;
 import ru.otus.hibernate.myORM.helpers.ConnectionHelper;
 import ru.otus.hibernate.myORM.helpers.DBHelper;
-import ru.otus.hibernate.myORM.models.DataSet;
+import ru.otus.hibernate.models.DataSet;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +28,7 @@ public class DBServiceImpl implements DBService {
 
     public DBServiceImpl() throws MyDBException {
     }
+
 
     @Override
     public <T extends DataSet> void save(T dataset) throws MyDBException {
@@ -126,10 +128,10 @@ public class DBServiceImpl implements DBService {
 
     @Override
     public void createTable(Class clazz) throws MyDBException {
-        String CREATE_TABLE = DBHelper.getCreateTableSQL(clazz);
-        logger.info(CREATE_TABLE);
+        String createTableSQL = DBHelper.getCreateTableSQL(clazz);
+        logger.info(createTableSQL);
         try {
-            PreparedStatement ps = connection.prepareStatement(CREATE_TABLE);
+            PreparedStatement ps = connection.prepareStatement(createTableSQL);
             ps.execute();
         } catch (SQLException e) {
             throw new MyDBException("Cannot drop table",e);
@@ -151,11 +153,27 @@ public class DBServiceImpl implements DBService {
         }
     }
 
+    @Override
+    public <T extends DataSet> long getCount(Class<T> clazz) throws MyDBException {
+        String sql="select count(*) from %s ;";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(String.format(sql,clazz.getSimpleName().toLowerCase()));
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getLong(1);
+        } catch (SQLException e) {
+            throw new MyDBException("Cannot get count",e);
+        }
+    }
+
 
     @Override
     public void close() throws Exception {
         connection.close();
     }
+
+
 
     private Connection getConnection() {
         return connection;

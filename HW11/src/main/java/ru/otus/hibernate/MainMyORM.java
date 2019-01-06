@@ -5,12 +5,12 @@ package ru.otus.hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.hibernate.exceptions.MyDBException;
-import ru.otus.hibernate.myORM.models.UserDataSet;
+import ru.otus.hibernate.models.UserDataSet;
 import ru.otus.hibernate.service.DBService;
 import ru.otus.hibernate.service.DBServiceImpl;
 
-public class Main {
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+public class MainMyORM {
+    private static Logger logger = LoggerFactory.getLogger(MainMyORM.class);
 
     public static void main(String[] args) throws MyDBException {
         DBService dbService=new DBServiceImpl();
@@ -32,6 +32,8 @@ public class Main {
         logger.info(dbService.loadByName("Vasya Pupkin",UserDataSet.class).toString());
 
         logger.info("");
+
+        logger.info(String.valueOf(dbService.getCount(UserDataSet.class)));
 
         dbService.truncateTable(UserDataSet.class);
         dbService.dropTable(UserDataSet.class);
