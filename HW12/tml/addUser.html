@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Add User</title>
+</head>
+<body>
+</p>
+<a href="/index.html">to index</a>
+<p></p>
+<form action="/addUser" method="POST">
+    <p>name: <input type="text" name="name"/></p>
+    <p>age: <input type="text" name="age"/></p>
+    <p>phone: <input type="text" name="phones"/></p>
+    <p>street: <input type="text" name="street"/></p>
+    <input type="submit" value="submit">
+</form>
+<h4>
+    ${message}
+</h4>
+<#if user?has_content>
+<table border="1">
+    <thead>
+    <tr>
+        <td><span style="color: #c82828;"><span style="caret-color: #c82828;">Id</span></span></td>
+        <td><span style="color: #c82828;">name</span></td>
+        <td><span style="color: #c82828;">age</span></td>
+        <td><span style="color: #c82828;">address</span></td>
+        <td><span style="color: #c82828;"><span style="caret-color: #c82828;">phone</span></span></td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+
+        <td>${user.getId()}</td>
+        <td>${user.getName()}</td>
+        <td>${user.getAge()}</td>
+        <td>${user.getAddress().getStreet()}</td>
+        <td>
+
+            <#list user.phones as phone>
+            <ul>
+                <li>${phone.getNumber()}</li>
+            </ul>
+        </#list>
+        </td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</#if>
+</body>
+</html>

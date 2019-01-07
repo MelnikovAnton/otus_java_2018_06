@@ -71,4 +71,9 @@ public class UserDataSet extends DataSet {
         phone.setNumber(s);
         setPhones(phone);
     }
+    public void setStreet(String s) {
+        AddressDataSet address = new AddressDataSet(this);
+        address.setStreet(s);
+        setAddress(address);
+    }
 }
