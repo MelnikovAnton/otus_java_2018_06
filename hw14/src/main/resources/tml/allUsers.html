@@ -1,0 +1,56 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>main</title>
+
+</head>
+<body>
+<p>
+    <h3>
+   Count: ${count}
+</h3>
+
+</p>
+<a href="index.html">to index</a>
+<br/>
+<table width="462">
+    <tr>
+        <th><a href="addUser">Add</a></th>
+        <th><a href="getByID">Get by ID</a></th>
+        <th><a href="allUsers">Get all users</a></th>
+    </tr>
+</table>
+<br/>
+<table border="1">
+    <thead>
+    <tr>
+        <td><span style="color: #c82828;"><span style="caret-color: #c82828;">Id</span></span></td>
+        <td><span style="color: #c82828;">name</span></td>
+        <td><span style="color: #c82828;">age</span></td>
+        <td><span style="color: #c82828;">address</span></td>
+        <td><span style="color: #c82828;"><span style="caret-color: #c82828;">phone</span></span></td>
+    </tr>
+    </thead>
+    <tbody>
+    <#list users as user>
+    <tr>
+
+        <td>${user.getId()}</td>
+        <td>${user.getName()}</td>
+        <td>${user.getAge()}</td>
+        <td>${user.getAddress().getStreet()}</td>
+        <td>
+
+          <#list user.phones as phone>
+            <ul>
+                <li>${phone.getNumber()}</li>
+            </ul>
+        </#list>
+        </td>
+        </td>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+</body>
+</html>
