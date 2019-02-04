@@ -5,8 +5,10 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import ru.otus.hw14.servlet.AddUserServlet;
 import ru.otus.hw14.servlet.AllUsersServlet;
+import ru.otus.hw14.servlet.EncodingFilter;
 import ru.otus.hw14.servlet.GetByIdServlet;
 
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -18,6 +20,8 @@ public class Initializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext rootContext =
                 new AnnotationConfigWebApplicationContext();
         rootContext.register(SpringConfig.class);
+        int a=1<<2;
+        System.out.println(a);
 
         // Manage the lifecycle of the root application context
         servletContext.addListener(new ContextLoaderListener(rootContext));
@@ -36,6 +40,10 @@ public class Initializer implements WebApplicationInitializer {
                 servletContext.addServlet("getByID", new GetByIdServlet());
         getByID.setLoadOnStartup(1);
         getByID.addMapping("/getByID");
+
+        FilterRegistration.Dynamic encodingFilter =
+                servletContext.addFilter("encodingFilter", EncodingFilter.class);
+        encodingFilter.addMappingForUrlPatterns(null,true,"/*");
 
 
     }
