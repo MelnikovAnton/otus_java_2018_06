@@ -7,7 +7,7 @@
     </appender>
 
 
-    <logger name="org.hibernate" level="info">
+    <logger name="org.hibernate" level="trace">
         <appender-ref ref="STDOUT" />
     </logger>
     <logger name="org.springframework" level="trace">
