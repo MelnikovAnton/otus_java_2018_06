@@ -23,6 +23,6 @@ public class MsgToForont extends Message {
         System.out.println(getJson());
         WsMessageType msg = GSON.fromJson(getJson(), WsMessageType.class);
         FrontService service = wrapper.getService(msg.getSession());
-        service.sendMessage(GSON.toJson(msg));
+        if (service!=null) service.sendMessage(GSON.toJson(msg));
     }
 }

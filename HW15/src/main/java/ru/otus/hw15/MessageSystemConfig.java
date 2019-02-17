@@ -20,16 +20,6 @@ public class MessageSystemConfig {
         return messageSystem;
     }
 
-//    @Bean(name = "frontAddress")
-//    public Address getFrontAddress() {
-//        return new Address(Adresses.FRONT_SERVICE.getName());
-//    }
-//
-//    @Bean(name = "dbAddress")
-//    public Address getDbAddress() {
-//        return new Address(Adresses.DB_SERVICE.getName());
-//    }
-
     @Bean(name = "frontAddressee")
     public Addressee getFrontAddressee(MessageSystem messageSystem) {
         return new FrontServiceWraper(new Address(Adresses.FRONT_SERVICE.getName()),messageSystem);

@@ -64,7 +64,6 @@ public class WebSocketFrontService implements FrontService {
     @OnError
     public void onError(Session session,Throwable t){
         System.out.println("ERROR!!! " + session.getId());
-        t.printStackTrace();
     }
 
     @Override

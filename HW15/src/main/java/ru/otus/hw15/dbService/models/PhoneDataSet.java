@@ -1,5 +1,7 @@
 package ru.otus.hw15.dbService.models;
 
+import ru.otus.hw15.messageUtils.NotForSerialize;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,6 +9,7 @@ public class PhoneDataSet extends DataSet {
     private String number;
 
     @ManyToOne
+    @NotForSerialize
     private UserDataSet userDataSet;
 
     public PhoneDataSet(UserDataSet userDataSet) {

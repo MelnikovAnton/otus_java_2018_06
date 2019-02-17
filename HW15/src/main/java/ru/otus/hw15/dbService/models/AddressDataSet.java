@@ -1,5 +1,7 @@
 package ru.otus.hw15.dbService.models;
 
+import ru.otus.hw15.messageUtils.NotForSerialize;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -9,6 +11,7 @@ public class AddressDataSet extends DataSet {
     private String street;
 
     @OneToOne
+    @NotForSerialize
     private UserDataSet userDataSet;
 
     public AddressDataSet(UserDataSet userDataSet) {
