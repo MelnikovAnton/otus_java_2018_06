@@ -1,14 +1,17 @@
 package ru.otus.hw15.frontendService;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
-import ru.otus.hw15.frontendService.exceptions.MyMessageSystemException;
+import ru.otus.hw15.messageSystem.exceptions.MyMessageSystemException;
 import ru.otus.hw15.messageSystem.messages.Message;
 import ru.otus.hw15.messageSystem.messages.MsgToDB;
+import ru.otus.hw15.messageSystem.messages.WsMessageType;
 import ru.otus.hw15.messageSystem.wraper.FrontServiceWraper;
-import ru.otus.hw15.messageUtils.MessageSystemContext;
+import ru.otus.hw15.messageSystem.messageUtils.MessageSystemContext;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.*;
@@ -16,6 +19,8 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/ws", configurator = SpringConfigurator.class)
 public class WebSocketFrontService implements FrontService {
+
+    private static Logger logger = LoggerFactory.getLogger(WebSocketFrontService.class);
 
     private final static Gson GSON=new Gson();
 
@@ -36,14 +41,14 @@ public class WebSocketFrontService implements FrontService {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("open-" + session.getId());
+        logger.info("open-" + session.getId());
         this.session = session;
         frontAddressee.addService(this);
     }
 
     @OnMessage
     public void onMessage(String message, Session session) throws MyMessageSystemException {
-        System.out.println("Message from the client " + session.getId() + " : " + message);
+        logger.info("Message from the client " + session.getId() + " : " + message);
         WsMessageType wsmsg = GSON.fromJson(message, WsMessageType.class);
         wsmsg.setSession(session.getId());
 
@@ -57,13 +62,13 @@ public class WebSocketFrontService implements FrontService {
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("close " + session.getId());
+        logger.info("close " + session.getId());
         frontAddressee.removeService(session.getId());
     }
 
     @OnError
     public void onError(Session session,Throwable t){
-        System.out.println("ERROR!!! " + session.getId());
+        logger.warn("ERROR!!! " + session.getId());
     }
 
     @Override
@@ -73,7 +78,7 @@ public class WebSocketFrontService implements FrontService {
 
     @Override
     public void sendMessage(String message) {
-        System.out.println("Sending message to WS "+ message);
+        logger.info("Sending message to WS "+ message);
         session.getAsyncRemote().sendText(message);
     }
 }

@@ -2,6 +2,7 @@ package ru.otus.hw15.messageSystem.messages;
 
 import ru.otus.hw15.messageSystem.Address;
 import ru.otus.hw15.messageSystem.Addressee;
+import ru.otus.hw15.messageSystem.exceptions.MyMessageSystemException;
 
 public abstract class Message {
     private final Address from;
@@ -27,5 +28,5 @@ public abstract class Message {
         return json;
     }
 
-    public abstract void exec(Addressee addressee);
+    public abstract void exec(Addressee addressee) throws MyMessageSystemException;
 }

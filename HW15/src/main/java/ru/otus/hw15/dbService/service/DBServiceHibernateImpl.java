@@ -33,17 +33,17 @@ public class DBServiceHibernateImpl implements DBService {
         configuration.addAnnotatedClass(SimpleDataSet.class);
 
 
-//        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-//        configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-//        configuration.setProperty("hibernate.connection.url", "jdbc:h2:mem:");
-//        configuration.setProperty("hibernate.connection.username", "sa");
-//        configuration.setProperty("hibernate.connection.password", "");
+        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:mem:");
+        configuration.setProperty("hibernate.connection.username", "sa");
+        configuration.setProperty("hibernate.connection.password", "");
 
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
-        configuration.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:postgresql://127.0.0.1:5432/test");
-        configuration.setProperty("hibernate.connection.username", "ivr");
-        configuration.setProperty("hibernate.connection.password", "ivr");
+//        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
+//        configuration.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
+//        configuration.setProperty("hibernate.connection.url", "jdbc:postgresql://127.0.0.1:5432/test");
+//        configuration.setProperty("hibernate.connection.username", "ivr");
+//        configuration.setProperty("hibernate.connection.password", "ivr");
 
         configuration.setProperty("hibernate.show_sql", "false");
         configuration.setProperty("hibernate.format_sql", "false");

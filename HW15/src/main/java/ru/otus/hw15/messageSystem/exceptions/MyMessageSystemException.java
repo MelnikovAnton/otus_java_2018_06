@@ -1,4 +1,4 @@
-package ru.otus.hw15.frontendService.exceptions;
+package ru.otus.hw15.messageSystem.exceptions;
 
 public class MyMessageSystemException extends Exception {
     public MyMessageSystemException(String m,Exception e) {

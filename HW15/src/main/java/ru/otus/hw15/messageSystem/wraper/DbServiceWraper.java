@@ -29,10 +29,6 @@ public class DbServiceWraper implements Addressee {
         return messageService;
     }
 
-    @PostConstruct
-    public void init(){
-        System.out.println("PostCunstruct"+this);
-    }
 
     public DBService getService(){
         return dbService;

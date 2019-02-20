@@ -1,5 +1,6 @@
 package ru.otus.hw15.messageSystem;
 
+import ru.otus.hw15.messageSystem.exceptions.MyMessageSystemException;
 import ru.otus.hw15.messageSystem.messages.Message;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.logging.Logger;
 
 public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
-    private static final int DEFAULT_STEP_TIME = 10;
 
     private final List<Thread> workers;
     private final Map<Address, LinkedBlockingQueue<Message>> messagesMap;
@@ -47,6 +47,8 @@ public final class MessageSystem {
                     } catch (InterruptedException e) {
                         logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
                         return;
+                    } catch (MyMessageSystemException e) {
+                        logger.log(Level.WARNING,"Error in exec message",e);
                     }
                 }
             });

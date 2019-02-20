@@ -1,4 +1,4 @@
-package ru.otus.hw15.messageUtils;
+package ru.otus.hw15.messageSystem.messageUtils;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;

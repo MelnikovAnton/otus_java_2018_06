@@ -1,4 +1,4 @@
-package ru.otus.hw15.messageUtils;
+package ru.otus.hw15.messageSystem.messageUtils;
 
 public enum Adresses {
     FRONT_SERVICE("Front"),DB_SERVICE("DB");

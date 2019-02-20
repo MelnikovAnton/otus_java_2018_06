@@ -1,4 +1,4 @@
-package ru.otus.hw15.messageUtils;
+package ru.otus.hw15.messageSystem.messageUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

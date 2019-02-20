@@ -1,6 +1,6 @@
-package ru.otus.hw15.messageUtils;
+package ru.otus.hw15.messageSystem.messageUtils;
 
-import ru.otus.hw15.frontendService.exceptions.MyMessageSystemException;
+import ru.otus.hw15.messageSystem.exceptions.MyMessageSystemException;
 import ru.otus.hw15.messageSystem.Address;
 import ru.otus.hw15.messageSystem.MessageSystem;
 

@@ -8,8 +8,8 @@ import ru.otus.hw15.messageSystem.Addressee;
 import ru.otus.hw15.messageSystem.MessageSystem;
 import ru.otus.hw15.messageSystem.wraper.DbServiceWraper;
 import ru.otus.hw15.messageSystem.wraper.FrontServiceWraper;
-import ru.otus.hw15.messageUtils.Adresses;
-import ru.otus.hw15.messageUtils.MessageSystemContext;
+import ru.otus.hw15.messageSystem.messageUtils.Adresses;
+import ru.otus.hw15.messageSystem.messageUtils.MessageSystemContext;
 
 @Configuration
 public class MessageSystemConfig {

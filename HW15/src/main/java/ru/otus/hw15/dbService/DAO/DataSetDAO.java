@@ -18,7 +18,6 @@ public class DataSetDAO<T extends DataSet> extends GeneralDao<T> {
 
     @Override
     public void save(T dataset) {
-        System.out.println(dataset);
         session.save(dataset);
     }
 

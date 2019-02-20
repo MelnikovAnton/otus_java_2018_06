@@ -22,8 +22,6 @@ public class Initializer implements WebApplicationInitializer {
         registerServlet(servletContext,"addUser","/addUser",new AddUserServlet());
         registerServlet(servletContext,"allUsers","/allUsers",new AllUsersServlet());
         registerServlet(servletContext,"getByID","/getByID",new GetByIdServlet());
-        registerServlet(servletContext,"login","/login",new LoginServlet());
-
 
 
         FilterRegistration.Dynamic filter = servletContext.addFilter("encodingFilter", EncodingFilter.class);

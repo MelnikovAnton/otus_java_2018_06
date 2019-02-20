@@ -1,6 +1,6 @@
 package ru.otus.hw15.dbService.models;
 
-import ru.otus.hw15.messageUtils.NotForSerialize;
+import ru.otus.hw15.messageSystem.messageUtils.NotForSerialize;
 
 import javax.persistence.*;
 

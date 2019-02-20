@@ -1,4 +1,4 @@
-package ru.otus.hw15.frontendService;
+package ru.otus.hw15.messageSystem.messages;
 
 public class WsMessageType {
     private String type;
