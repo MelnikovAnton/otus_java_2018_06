@@ -38,25 +38,43 @@ public final class MessageSystem {
     public void start() {
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
             String name = "MS-worker-" + entry.getKey().getId();
-            Thread thread = new Thread(() -> {
-                LinkedBlockingQueue<Message> queue = messagesMap.get(entry.getKey());
-                while (true) {
-                    try {
-                        Message message = queue.take();
-                        message.exec(entry.getValue());
-                    } catch (InterruptedException e) {
-                        logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
-                        return;
-                    } catch (MyMessageSystemException e) {
-                        logger.log(Level.WARNING,"Error in exec message",e);
-                    }
-                }
-            });
+            Thread thread = new Thread(()->run(entry));
+//            Thread thread = new Thread(() -> {
+//                LinkedBlockingQueue<Message> queue = messagesMap.get(entry.getKey());
+//                while (true) {
+//                    try {
+//                        Message message = queue.take();
+//                        message.exec(entry.getValue());
+//                    } catch (InterruptedException e) {
+//                        logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
+//                        return;
+//                    } catch (MyMessageSystemException e) {
+//                        logger.log(Level.WARNING,"Error in exec message",e);
+//                    }
+//                }
+//            });
             thread.setName(name);
             thread.start();
             workers.add(thread);
         }
     }
+
+    private void run(Map.Entry<Address, Addressee> entry){
+        LinkedBlockingQueue<Message> queue = messagesMap.get(entry.getKey());
+        String name = "MS-worker-" + entry.getKey().getId();
+        while (true) {
+            try {
+                Message message = queue.take();
+                message.exec(entry.getValue());
+            } catch (InterruptedException e) {
+                logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
+                return;
+            } catch (MyMessageSystemException e) {
+                logger.log(Level.WARNING,"Error in exec message",e);
+            }
+        }
+    }
+
 
     public void dispose() {
         workers.forEach(Thread::interrupt);

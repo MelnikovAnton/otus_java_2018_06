@@ -99,13 +99,16 @@ public class MsgToDB extends Message {
         addressee.getMS().sendMessage(resp);
     }
 
-    public static <T> T initializeAndUnproxy(T entity) {
+    public static <T> T initializeAndUnproxy(T entity) throws MyMessageSystemException {
         if (entity == null) {
             throw new
                     NullPointerException("Entity passed for initialization is null");
         }
-
-        Hibernate.initialize(entity);
+        try {
+            Hibernate.initialize(entity);
+        } catch (Exception e) {
+            throw new MyMessageSystemException("hibernate initialize exception", e);
+        }
         if (entity instanceof HibernateProxy) {
             entity = (T) ((HibernateProxy) entity).getHibernateLazyInitializer()
                     .getImplementation();

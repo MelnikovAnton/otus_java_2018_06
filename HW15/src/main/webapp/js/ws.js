@@ -109,10 +109,13 @@ function sendGetAllReq() {
 }
 
 function getWsUrl() {
-    return "ws://" + window.location.host + "/"
+
+    str=
+    "ws://" + window.location.host + "/"
         + window.location.pathname.toString().split("/")[1]
         + "/ws";
 
+return str;
 }
 
 function waitForSocketConnection(socket, callback) {
