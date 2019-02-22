@@ -10,6 +10,9 @@ import ru.otus.hw15.messageSystem.exceptions.MyMessageSystemException;
 import ru.otus.hw15.messageSystem.messages.Message;
 import ru.otus.hw15.messageSystem.messages.MsgToDB;
 import ru.otus.hw15.messageSystem.messages.WsMessageType;
+import ru.otus.hw15.messageSystem.messages.msgToDb.AddUserMsg;
+import ru.otus.hw15.messageSystem.messages.msgToDb.AllUserMsg;
+import ru.otus.hw15.messageSystem.messages.msgToDb.GetByIdMsg;
 import ru.otus.hw15.messageSystem.wraper.FrontServiceWraper;
 import ru.otus.hw15.messageSystem.messageUtils.MessageSystemContext;
 
@@ -52,9 +55,28 @@ public class WebSocketFrontService implements FrontService {
         WsMessageType wsmsg = GSON.fromJson(message, WsMessageType.class);
         wsmsg.setSession(session.getId());
 
-        Message msg = new MsgToDB(context.getAddress("Front"),
-                context.getAddress("DB"),
-                GSON.toJson(wsmsg));
+        String type = wsmsg.getType();
+
+        Message msg;
+        switch (type) {
+            case "AddUserReq":
+                 msg = new AddUserMsg(context.getAddress("Front"),
+                        context.getAddress("DB"),
+                        GSON.toJson(wsmsg));
+                break;
+            case "GetByIdReq":
+                 msg = new GetByIdMsg(context.getAddress("Front"),
+                        context.getAddress("DB"),
+                        GSON.toJson(wsmsg));
+                break;
+            case "GetAllReq":
+                 msg = new AllUserMsg(context.getAddress("Front"),
+                        context.getAddress("DB"),
+                        GSON.toJson(wsmsg));
+                break;
+            default:
+                throw new MyMessageSystemException("Message type " + type + " not supported");
+        }
 
         context.getMessageSystem().sendMessage(msg);
 

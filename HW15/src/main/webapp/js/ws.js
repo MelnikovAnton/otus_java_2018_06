@@ -26,6 +26,7 @@ webSocket.onclose = function (ev) {
 
 
 function drawAllUserResp(data, id) {
+    document
     document.getElementById("count").innerText = "Всего пользователей: " + data.length;
     var div = document.getElementById(id);
     var labels1 = ['ID', 'Имя', 'Возраст', 'Адрес', 'Телефон'];
@@ -109,14 +110,16 @@ function sendGetAllReq() {
 }
 
 function getWsUrl() {
-
+    var arr=window.location.pathname.toString().split("/");
+    arr.pop();
+    arr.push("ws");
     str=
-    "ws://" + window.location.host + "/"
-        + window.location.pathname.toString().split("/")[1]
-        + "/ws";
+        "ws://" + window.location.host + "/"
+        + arr.join("/");
 
 return str;
 }
+
 
 function waitForSocketConnection(socket, callback) {
     setTimeout(
