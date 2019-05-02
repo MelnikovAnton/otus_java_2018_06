@@ -83,7 +83,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.gc.Main</mainClass>
+                            <mainClass>ru.otus.json.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
